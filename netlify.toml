@@ -1,0 +1,13 @@
+# Proxy committed Micropub uploads through the canonical domain.
+#
+# The Micropub receiver commits images into content/uploads/ and writes
+# absolute photo URLs like https://<domain>/content/uploads/<file>. Astro's
+# static build only publishes dist/, so content/ is never deployed and those
+# URLs 404 for external consumers (RSS/h-feed readers, Bridgy Fed -> Mastodon/
+# Bluesky). This transparent proxy (status = 200) serves the file straight from
+# the GitHub repo the receiver commits to, with the URL staying on this domain.
+[[redirects]]
+  from = "/content/uploads/*"
+  to = "https://raw.githubusercontent.com/samjstone/personal-site/main/content/uploads/:splat"
+  status = 200
+  force = true
