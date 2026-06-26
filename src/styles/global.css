@@ -1,1 +1,87 @@
 @import "tailwindcss";
+
+@font-face {
+  font-family: "Kablammo";
+  src: url("/fonts/Kablammo.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Macondo";
+  src: url("/fonts/Macondo-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Dela Gothic One";
+  src: url("/fonts/DelaGothicOne-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@theme {
+  --font-title: "Kablammo", cursive;
+  --font-macondo: "Macondo", cursive;
+  --font-dela: "Dela Gothic One", sans-serif;
+  --color-theme-orange: #ff803e;
+  --color-theme-yellow: #f0cc4d;
+  --color-theme-blue: #64afbd;
+  --color-theme-green: #5ea35b;
+  --color-background: #322e2b;
+  --color-light: #fff3d6;
+}
+
+/* Strawberry decorative frame (foollovers.com frame16-a) drawn as an overlay
+   so the header's own background image is preserved. Corner tiles sit on top
+   of the repeating edge tiles. */
+.header-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    url("/strawb-frame/f-kado1.gif"), url("/strawb-frame/f-kado2.gif"),
+    url("/strawb-frame/f-kado3.gif"), url("/strawb-frame/f-kado4.gif"),
+    url("/strawb-frame/f-ue.gif"), url("/strawb-frame/f-sita.gif"),
+    url("/strawb-frame/f-hidari.gif"), url("/strawb-frame/f-migi.gif");
+  background-position:
+    top left,
+    top right,
+    bottom left,
+    bottom right,
+    top left,
+    bottom left,
+    top left,
+    top right;
+  background-repeat:
+    no-repeat, no-repeat, no-repeat, no-repeat, repeat-x, repeat-x, repeat-y,
+    repeat-y;
+}
+
+.box23{
+background:#ccb3a1; /* 背景色 */
+box-shadow:3px 3px 5px #666;
+box-sizing:border-box;
+margin:45px auto 20px;
+padding:30px 10px 10px;
+position:relative;
+width:80%
+}
+.masking-tape{
+background:url(masking01.png) no-repeat center;
+height:50px;
+position:absolute;
+top:-25px;
+width:100%
+}
+
+.paperclip {
+background:url(paperclip.png) no-repeat;
+height:62px;
+position:absolute;
+right:10px;
+top:-13px;
+width:27px
+}
