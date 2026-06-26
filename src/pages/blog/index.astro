@@ -1,0 +1,24 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../../layouts/Layout.astro";
+import { getFeed } from "../../lib/posts";
+
+const feed = await getFeed();
+---
+
+<Layout>
+    <div class="flex flex-row gap-8 m-15 min-h-screen">
+        <main class="w-10/12">
+            {feed.map((post) => (
+            <div class="bg-light mb-5 p-5 rounded drop-shadow-2xl">
+                {post.data.photo.map((p) => <Image src={p} alt={"post image"} inferSize class="w-full h-auto" />)}
+                {post.data.date.toDateString()} - {post.data.title}
+                {post.body}
+            </div>
+        ))}
+        </main>
+        <nav class="w-2/12">
+            <div class="bg-light h-50 p-5 rounded drop-shadow-2xl"></div>
+        </nav>
+    </div>
+</Layout>

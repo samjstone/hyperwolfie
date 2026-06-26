@@ -1,21 +1,63 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { getFeed, getPhotos } from '../lib/posts';
+import Layout from "../layouts/Layout.astro";
+import { getEntry, render } from "astro:content";
 
-const feed = await getFeed()
+import { getFeed } from "../lib/posts";
+
+const feed = await getFeed();
+
+const bio = await getEntry("site", "bio");
+const { Content: BioContent } = await render(bio!);
 ---
 
 <Layout>
-	<div class="flex flex-col items-center justify-center min-h-screen p-4">
-	{feed.map((post) => (
-		<div class="border-2 p-2">
-			{post.postType === 'photo' && getPhotos(post.data.photo).map((src) => (
-				<div class="w-sm">
-					<img src={src} alt="" />
-				</div>
-			))}
-			{post.body}
-		</div>
-	))}
-	</div>
+  <div class="flex flex-col items-center min-h-screen m-15">
+    <header
+      class="outline-dotted outline-light header-frame mb-10 before:absolute before:inset-0 before:bg-yellow-100/20 before:content-[''] bg-[url(/src/assets/images/forest-banner.jpg)] bg-cover rounded content-end relative w-full align-text-bottom font-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl p-5 h-64 text-theme-orange"
+    >
+      <h1 class="drop-shadow-[2px_2px_3px_rgba(0,0,0,1)]">HYPERWOLFIE</h1>
+      <img
+        class="absolute bottom-0 right-0 h-5/12 md:h-8/12 lg:h-full"
+        src="/src/assets/images/wolfie-run.gif"
+        alt="Wolf running gif"
+      />
+    </header>
+    <div class="flex flex-row justify-between w-full gap-10">
+      <div class="w-3/12 relative">
+        <menu class="flex flex-col p-5 rounded drop-shadow-2xl bg-light">
+          <div class="paperclip"></div>
+          <h2 class="font-dela text-2xl text-theme-blue">EXPLORE...</h2>
+          <hr class="border-t-2 border-dotted border-background mb-2" />
+
+          <a href="/about" class="font-macondo text-xl hover:cursor-pointer hover:text-theme-green">
+            About
+          </a>
+          <a href="/blog" class="font-macondo text-xl hover:cursor-pointer hover:text-theme-green">
+            Blog
+          </a>
+        </menu>
+      </div>
+      <div class="flex flex-col gap-5 w-1/2">
+        <main class="relative">
+          <div class="bg-light h-50 p-5 rounded drop-shadow-2xl relative">
+            <div
+              class="outline-dotted outline-background h-full rounded overflow-x-scroll p-2"
+            >
+              <img
+                src="/src/assets/images/wolf-walk.gif"
+                alt="A gif of a wolf walking"
+                class="float-left w-20"
+              />
+              <BioContent />
+            </div>
+          </div>
+          <div class="masking-tape"></div>
+        </main>
+        <div class="bg-light h-50 p-5 rounded drop-shadow-2xl"></div>
+      </div>
+      <div class="w-3/12">
+        <div class="bg-light">MENU</div>
+      </div>
+    </div>
+  </div>
 </Layout>
