@@ -1,3 +1,8 @@
+# Send a webmention to Bridgy Fed for each newly added, syndication-flagged
+# post (see plugins/bridgy-webmention). Runs onSuccess, after the build.
+[[plugins]]
+  package = "/plugins/bridgy-webmention"
+
 # Proxy committed Micropub uploads through the canonical domain.
 #
 # The Micropub receiver commits images into content/uploads/ and writes
