@@ -20,3 +20,12 @@
   from = "/.well-known/webfinger*"
   to = "https://fed.brid.gy/.well-known/webfinger"
   status = 302
+
+# Bluesky (ATProto) handle verification for the custom handle `hyperwolfie.com`.
+# Bluesky fetches the plain-text DID from this path to confirm we own the domain.
+# Served as a static file from public/.well-known/atproto-did; this header just
+# guarantees the correct content-type.
+[[headers]]
+  for = "/.well-known/atproto-did"
+  [headers.values]
+    Content-Type = "text/plain; charset=utf-8"
