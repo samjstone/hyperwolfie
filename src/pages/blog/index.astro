@@ -20,7 +20,7 @@ const feed = await getFeed();
                 class="u-photo w-full h-auto"
               />
             ))}
-            <time class="dt-published" datetime={post.data.date}>
+            <time class="dt-published" datetime={post.data.date.toISOString()}>
               {post.data.date.toDateString()} - {post.data.title}
             </time>
             <p class="e-content">{post.body}</p>
@@ -29,7 +29,8 @@ const feed = await getFeed();
               href="https://fed.brid.gy/"
               hidden="from-humans"
             />
-            <a class="p-author h-card" href="https://hyperwolfie.com/">HyperWolfie</a>
+            <a href={`/${post.id}`}>Link to Post</a>
+            <a class="p-author h-card hidden" href="https://hyperwolfie.com/">HyperWolfie</a>
           </div>
         ))
       }
