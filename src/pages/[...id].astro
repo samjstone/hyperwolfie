@@ -1,6 +1,7 @@
 f---
 import { getCollection, render } from "astro:content";
 import Layout from "../layouts/Layout.astro";
+import { Image } from "astro:assets";
 
 export async function getStaticPaths() {
   const posts = await getCollection("post");
@@ -14,7 +15,24 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 <Layout>
-  <article class="h-entry">
-    <Content />
-  </article>
+  <div class="h-entry bg-light mb-5 p-5 rounded drop-shadow-2xl">
+    {post.data.photo.map((p) => (
+      <Image
+        src={p}
+        alt={"post image"}
+        inferSize
+        class="u-photo w-full h-auto"
+      />
+    ))}
+    <time class="dt-published" datetime={post.data.date.toISOString()}>
+      {post.data.date.toDateString()} - {post.data.title}
+    </time>
+    <p class="e-content">{post.body}</p>
+    <a
+      class="u-bridgy-fed"
+      href="https://fed.brid.gy/"
+      hidden="from-humans"
+    />
+    <a class="p-author h-card hidden" href="https://hyperwolfie.com/">HyperWolfie</a>
+  </div>
 </Layout>
