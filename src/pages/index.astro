@@ -12,6 +12,11 @@ const { Content: BioContent } = await render(bio!);
 
 <Layout>
   <div class="flex flex-col items-center min-h-screen m-15">
+    <div class="h-card hidden">
+      <a class="u-url p-name" rel="me" href="https://hyperwolfie.com/">HyperWolfie</a>
+      <img class="u-photo" src="https://hyperwolfie.com/favicon.svg" alt="HyperWolfie">
+      <p class="p-note">your one-line bio</p>
+    </div>
     <header
       class="outline-dotted outline-light header-frame mb-10 before:absolute before:inset-0 before:bg-yellow-100/20 before:content-[''] bg-[url(/assets/images/forest-banner.jpg)] bg-cover rounded content-end relative w-full align-text-bottom font-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl p-5 h-64 text-theme-orange"
     >
