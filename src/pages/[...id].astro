@@ -2,9 +2,10 @@ f---
 import { getCollection, render } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
+import { getFeed, getPosts, getRoutablePosts } from "../lib/posts";
 
 export async function getStaticPaths() {
-  const posts = await getCollection("post");
+  const posts = await getFeed();
   return posts.map((post) => ({
     params: { id: post.id, slug: post.collection },
     props: { post },
