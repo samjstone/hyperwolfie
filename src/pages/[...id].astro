@@ -2,7 +2,7 @@ f---
 import { getCollection, render } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
-import { getFeed, getPosts, getRoutablePosts } from "../lib/posts";
+import { getFeed } from "../lib/posts";
 
 export async function getStaticPaths() {
   const posts = await getFeed();
