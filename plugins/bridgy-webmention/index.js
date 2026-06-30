@@ -1,61 +1,55 @@
 import { execSync } from "node:child_process";
-import { readFileSync } from "node:fs";
 
 const SITE = "https://hyperwolfie.com";
 const TARGET = "https://fed.brid.gy/";
-const TELEGRAPH = "https://telegraph.p3k.io/webmention";
+const BRIDGY_WEBMENTION = "https://fed.brid.gy/webmention";
 
-// Netlify build plugin: when a post is ADDED under content/ and the author
-// flagged it for syndication (mp-syndicate-to: https://fed.brid.gy/), ask
-// Telegraph to send a webmention from the post URL to Bridgy Fed, which then
-// federates it to the fediverse + Bluesky. One webmention per newly added post.
+// Netlify build plugin. For every post added or modified in this deploy, send
+// Bridgy Fed a webmention (source = post URL, target = fed.brid.gy). Bridgy
+// refetches the source and acts on the HTTP response — so the route is the only
+// source of truth and the plugin needs no frontmatter logic:
+//   - 200 + h-entry  -> federate / update on the fediverse + Bluesky
+//   - 404 / 410      -> delete the bridged copy everywhere
+//
+// The route (getFeed) builds a page only for public, listed posts; draft /
+// deleted / private / unlisted posts 404. So:
+//   - publish a post           -> 200 -> federates automatically (no flag needed)
+//   - mark it `deleted: true`  -> 404 -> Bridgy removes it
+// To keep a post OFF Bluesky, keep it from being a public listed page (draft,
+// unlisted, private, or deleted).
 //
 // Bridgy Fed one-way door: the first webmention it receives makes it STOP
-// polling the RSS/Atom feed and expect webmentions for all future posts — so
-// only the opted-in (mp-syndicate-to) posts will federate from then on.
+// polling the RSS/Atom feed and expect webmentions for all future posts.
 export const onSuccess = async () => {
-  const token = process.env.TELEGRAPH_TOKEN;
-  if (!token) return console.log("bridgy: no TELEGRAPH_TOKEN, skipping");
-
   const { CACHED_COMMIT_REF, COMMIT_REF } = process.env;
-  let added = [];
+  if (!COMMIT_REF) return console.log("bridgy: no COMMIT_REF, skipping");
+  const range = CACHED_COMMIT_REF ? `${CACHED_COMMIT_REF} ${COMMIT_REF}` : COMMIT_REF;
+
+  let changed;
   try {
-    const range = CACHED_COMMIT_REF ? `${CACHED_COMMIT_REF} ${COMMIT_REF}` : COMMIT_REF;
-    added = execSync(`git diff --name-only --diff-filter=A ${range} -- content`)
-      .toString().trim().split("\n")
-      .filter((f) =>
-        f.endsWith(".md") &&
-        !f.startsWith("content/site/") &&  // bio singletons aren't posts
-        !f.includes("/webmentions/")       // incoming-mention sidecars
-      );
+    changed = execSync(`git diff --name-only --diff-filter=AM ${range} -- content`)
+      .toString().trim().split("\n").filter(Boolean).filter(isPost);
   } catch {
     return console.log("bridgy: no git range, skipping");
   }
-  if (!added.length) return console.log("bridgy: no new posts");
+  if (!changed.length) return console.log("bridgy: no changed posts");
 
-  for (const file of added) {
-    const fm = frontmatter(readFileSync(file, "utf8"));
-    if (!/fed\.brid\.gy/.test(fm["mp-syndicate-to"] || "")) continue; // opt-in only
-    if (fm.deleted === "true" || fm.draft === "true" ||
-        fm["post-status"] === "draft" || fm.visibility === "private") continue;
-
-    const source = `${SITE}/${file.replace(/^content\//, "").replace(/\.md$/, "")}`;
-    const res = await fetch(TELEGRAPH, {
+  for (const file of changed) {
+    const source = toSource(file);
+    const res = await fetch(BRIDGY_WEBMENTION, {
       method: "POST",
       headers: { "content-type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ token, source, target: TARGET }),
+      body: new URLSearchParams({ source, target: TARGET }),
     });
-    console.log(`bridgy: ${source} -> ${res.status}${res.ok ? "" : " " + (await res.text())}`);
+    console.log(`bridgy: ${source} -> ${res.status}`);
   }
 };
 
-// minimal "key: value" frontmatter scan — enough for the flags above
-function frontmatter(raw) {
-  const m = raw.match(/^---\n([\s\S]*?)\n---/);
-  const out = {};
-  if (m) for (const line of m[1].split("\n")) {
-    const kv = line.match(/^([\w-]+):\s*['"]?(.*?)['"]?\s*$/);
-    if (kv) out[kv[1]] = kv[2];
-  }
-  return out;
-}
+const isPost = (f) =>
+  f.endsWith(".md") &&
+  !f.startsWith("content/site/") && // bio singletons aren't posts
+  !f.includes("/webmentions/"); // incoming-mention sidecars
+
+// Trailing slash to match the canonical URL Bridgy federates (bridgyOriginalUrl).
+const toSource = (f) =>
+  `${SITE}/${f.replace(/^content\//, "").replace(/\.md$/, "")}/`;
