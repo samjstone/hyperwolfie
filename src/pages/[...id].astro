@@ -1,19 +1,21 @@
-f---
+---
 import { getCollection, render } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
+import { getGroupedWebmentions, getWebmentions } from "../lib/webmentions";
 import { getFeed } from "../lib/posts";
 
 export async function getStaticPaths() {
   const posts = await getFeed();
   return posts.map((post) => ({
-    params: { id: post.id, slug: post.collection },
+    params: { id: post.id },
     props: { post },
   }));
 }
 
 const { post } = Astro.props;
 const { Content } = await render(post);
+const { likes, reposts, replies, mentions } = await getGroupedWebmentions(post.id)
 ---
 <Layout>
   <div class="h-entry bg-light mb-5 p-5 rounded drop-shadow-2xl">
@@ -36,4 +38,15 @@ const { Content } = await render(post);
     />
     <a class="p-author h-card hidden" href="https://hyperwolfie.com/">HyperWolfie</a>
   </div>
+  {
+    likes.map((like) => (
+      <div class="h-entry bg-light mb-5 p-5 rounded drop-shadow-2xl">
+        <a class="p-author h-card" href={like.data.author?.url}>
+          {like.data.author?.name}
+        </a>
+        <p class="e-content">{like.data.content?.text}</p>
+      </div>
+    ))
+  }
+  {}
 </Layout>

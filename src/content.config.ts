@@ -48,4 +48,43 @@ const site = defineCollection({
   }),
 });
 
-export const collections = { post, site };
+const webmention = defineCollection({
+  // One JSON file per received webmention, committed beside its target post at
+  // content/<post-id>/webmentions/<hash>.json by the serverless receiver. The
+  // body is webmention.io's jf2 `post` (hyphenated wm-* fields). Read
+  // defensively (like the post collection): likes carry no content and a sparse
+  // author, and wm-property can be a value not in any fixed list.
+  loader: glob({ pattern: "**/webmentions/*.json", base: "./content" }),
+  schema: z
+    .object({
+      "wm-id": z.number().optional(),
+      // like-of | repost-of | in-reply-to | mention-of | bookmark-of | rsvp | …
+      "wm-property": z.string().optional(),
+      "wm-source": z.string().optional(),
+      "wm-target": z.string().optional(),
+      url: z.string().optional(),
+      // jf2 sends null when unknown — normalize null/missing -> undefined.
+      published: z.preprocess(
+        (v) => (v ? new Date(v as string) : undefined),
+        z.date().optional(),
+      ),
+      author: z
+        .object({
+          name: z.string().optional(),
+          url: z.string().optional(),
+          photo: z.string().optional(),
+        })
+        .loose()
+        .optional(),
+      content: z
+        .object({
+          text: z.string().optional(),
+          html: z.string().optional(),
+        })
+        .loose()
+        .optional(),
+    })
+    .loose(),
+});
+
+export const collections = { post, site, webmention };
