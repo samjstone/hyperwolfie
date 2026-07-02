@@ -14,16 +14,16 @@ export const WebmentionSchema = z.object({
   author: z.object({
     type: z.string(),
     name: z.string(),
-    url: z.url().optional(),
-    photo: z.url().optional(),
+    url: z.url().or(z.literal("")).optional(),
+    photo: z.url().or(z.literal("")).optional(),
   }),
   url: z.url(),
   published: z.string().nullable().optional(),
   "wm-id": z.number(),
   content: z
     .object({
-      text: z.string(),
-      html: z.string(),
+      text: z.string().optional(),
+      html: z.string().optional(),
     })
     .optional(),
   "wm-property": WebmentionProperties,

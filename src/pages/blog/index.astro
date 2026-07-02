@@ -5,27 +5,17 @@ import { getFeed } from "../../lib/posts";
 import SideNav from "../../components/SideNav.astro";
 import Post from "../../components/Post.astro";
 import wolfYell from "../../assets/images/wolf-yell.gif";
+import Header from "../../components/Header.astro";
 
 const feed = await getFeed();
 ---
 
 <Layout>
-  <div class="flex flex-col items-center min-h-screen m-15">
-    <header
-      class="outline-dotted outline-light header-frame mb-10 before:absolute before:inset-0 before:bg-yellow-100/8 before:content-[''] bg-[url(/src/assets/images/beautiful-clover-field.jpeg)] bg-cover rounded-xs content-end relative w-full align-text-bottom font-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl p-5 h-64 text-theme-orange"
-    >
-      <h1 class="drop-shadow-[2px_2px_3px_rgba(0,0,0,1)]">Blog</h1>
-      <img
-        class="absolute bottom-0 right-0 h-5/12 md:h-8/12 lg:h-full"
-        src={wolfYell.src}
-        alt="Wolf running gif"
-      />
-    </header>
-    <div class="flex flex-row gap-8 ">
+    <Header backgroundSrc="/src/assets/images/beautiful-clover-field.jpeg" decorationSrc={wolfYell.src}  text="Blog"/>
+    <div class="flex flex-row gap-10 w-full">
       <SideNav />
-      <main class="w-6/12">
+      <main class="w-1/2">
         {feed.map((post) => <Post post={post} />)}
       </main>
     </div>
-  </div>
 </Layout>

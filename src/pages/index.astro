@@ -5,6 +5,7 @@ import { getFeed } from "../lib/posts";
 import SideNav from "../components/SideNav.astro";
 import wolfieRun from "../assets/images/wolfie-run.gif";
 import wolfWalk from "../assets/images/wolf-walk.gif";
+import Header from "../components/Header.astro";
 
 const feed = await getFeed();
 
@@ -13,53 +14,35 @@ const { Content: BioContent } = await render(bio!);
 ---
 
 <Layout>
-  <div class="flex flex-col items-center min-h-screen m-15">
-    <div class="h-card hidden">
-      <a class="u-url p-name" rel="me" href="https://hyperwolfie.com/"
-        >HyperWolfie</a
-      >
-      <img
-        class="u-photo"
-        src="https://hyperwolfie.com/favicon.svg"
-        alt="HyperWolfie"
-      />
-      <p class="p-note">your one-line bio</p>
-    </div>
-    <header
-      class="outline-dotted outline-light header-frame mb-10 before:absolute before:inset-0 before:bg-yellow-100/20 before:content-[''] bg-[url(/src/assets/images/forest-banner.jpg)] bg-cover rounded-xs content-end relative w-full align-text-bottom font-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl p-5 h-64 text-theme-orange"
-    >
-      <h1 class="drop-shadow-[2px_2px_3px_rgba(0,0,0,1)]">HYPERWOLFIE</h1>
-      <img
-        class="absolute bottom-0 right-0 h-5/12 md:h-8/12 lg:h-full"
-        src={wolfieRun.src}
-        alt="Wolf running gif"
-      />
-    </header>
-    <div class="flex flex-row justify-between w-full gap-5">
-      <SideNav />
-      <div class="flex flex-col gap-5 w-1/2">
-        <main class="relative">
+  <Header
+    backgroundSrc="/src/assets/images/forest-banner.jpg"
+    decorationSrc={wolfieRun.src}
+    text="HyperWolfie"
+  />
+  <div class="flex flex-row justify-between w-full gap-5">
+    <SideNav />
+    <div class="flex flex-col gap-5 w-1/2">
+      <main class="relative">
+        <div
+          class="outline-solid outline-theme-dark bg-light h-50 p-5 rounded-xs relative"
+        >
           <div
-            class="outline-solid outline-theme-dark bg-light h-50 p-5 rounded-xs relative"
+            class="outline-dotted outline-background h-full rounded-xs overflow-x-scroll p-2"
           >
-            <div
-              class="outline-dotted outline-background h-full rounded-xs overflow-x-scroll p-2"
-            >
-              <img
-                src={wolfWalk.src}
-                alt="A gif of a wolf walking"
-                class="float-left w-20"
-              />
-              <BioContent />
-            </div>
+            <img
+              src={wolfWalk.src}
+              alt="A gif of a wolf walking"
+              class="float-left w-20"
+            />
+            <BioContent />
           </div>
-          <div class="masking-tape"></div>
-        </main>
-        <div class="bg-light h-50 p-5 rounded-xs"></div>
-      </div>
-      <div class="w-3/12">
-        <div class="bg-light">MENU</div>
-      </div>
+        </div>
+        <div class="masking-tape"></div>
+      </main>
+      <div class="bg-light h-50 p-5 rounded-xs"></div>
+    </div>
+    <div class="w-3/12">
+      <div class="bg-light">MENU</div>
     </div>
   </div>
 </Layout>

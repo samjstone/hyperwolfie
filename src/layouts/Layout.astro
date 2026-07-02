@@ -1,34 +1,60 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
-
 ---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="generator" content={Astro.generator} />
-		<link rel="authorization_endpoint" href="https://hyperwolfie-auth.netlify.app/auth">
-		<link rel="token_endpoint" href="https://hyperwolfie-auth.netlify.app/token">
-		<link rel="micropub" href="https://hyperwolfie-indieweb.netlify.app/micropub">
-		<link rel="indieauth-metadata" href="https://hyperwolfie-auth.netlify.app/.well-known/oauth-authorization-server">
-		<link rel="webmention" href="https://webmention.io/hyperwolfie.com/webmention" />
-		<title>HyperWolfie</title>
-	</head>
-	<body class="bg-background">
-		<slot />
-	</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="generator" content={Astro.generator} />
+    <link
+      rel="authorization_endpoint"
+      href="https://hyperwolfie-auth.netlify.app/auth"
+    />
+    <link
+      rel="token_endpoint"
+      href="https://hyperwolfie-auth.netlify.app/token"
+    />
+    <link
+      rel="micropub"
+      href="https://hyperwolfie-indieweb.netlify.app/micropub"
+    />
+    <link
+      rel="indieauth-metadata"
+      href="https://hyperwolfie-auth.netlify.app/.well-known/oauth-authorization-server"
+    />
+    <link
+      rel="webmention"
+      href="https://webmention.io/hyperwolfie.com/webmention"
+    />
+    <title>HyperWolfie</title>
+  </head>
+  <body class="bg-background">
+    <div class="h-card hidden">
+      <a class="u-url p-name" rel="me" href="https://hyperwolfie.com/"
+        >HyperWolfie</a
+      >
+      <img
+        class="u-photo"
+        src="https://hyperwolfie.com/favicon.svg"
+        alt="HyperWolfie"
+      />
+      <p class="p-note">your one-line bio</p>
+    </div>
+    <ClientRouter />
+    <div class="flex flex-col items-center min-h-screen m-15"><slot /></div>
+  </body>
 </html>
 
 <style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
+  html,
+  body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+  }
 </style>
-<ClientRouter />

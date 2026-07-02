@@ -77,34 +77,17 @@
     repeat-y;
 }
 
-/* Speech-bubble tail on the left side, near the bottom. Two stacked triangles:
-   ::before is the dark outline layer, ::after is a slightly smaller light fill
-   on top. The light triangle's base is pushed 2px into the bubble so it also
-   covers the bubble's own edge outline at the mouth, leaving a clean opening. */
-.chat-bubble::before,
-.chat-bubble::after {
+.chat-bubble::before {
   content: "";
   position: absolute;
-  width: 0;
-  height: 0;
-  border-style: solid;
-}
-
-/* dark outline layer: left-pointing triangle, base flush with the bubble edge */
-.chat-bubble::before {
-  left: -14px;
+  left: 0;
   bottom: 1.5rem;
-  border-width: 12px 14px 12px 0;
-  border-color: transparent var(--color-theme-dark) transparent transparent;
-}
-
-/* light fill layer: 2px smaller so the dark shows as an outline, base pushed
-   2px past the edge to cover the bubble's outline across the mouth */
-.chat-bubble::after {
-  left: -12px;
-  bottom: calc(1.5rem + 2px);
-  border-width: 10px 14px 10px 0;
-  border-color: transparent var(--color-light) transparent transparent;
+  width: 15px;
+  height: 15px;
+  background: var(--color-light);
+  border-left: 1.5px solid var(--color-theme-dark);
+  border-bottom: 1.5px solid var(--color-theme-dark);
+  transform: translateX(-57%) rotate(45deg);
 }
 
 .box23{
