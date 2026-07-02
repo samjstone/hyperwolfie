@@ -5,6 +5,7 @@ import { getFeed } from "../lib/posts";
 import SideNav from "../components/SideNav.astro";
 import wolfieRun from "../assets/images/wolfie-run.gif";
 import wolfWalk from "../assets/images/wolf-walk.gif";
+import forestBanner from "../assets/images/forest-banner.jpg";
 import Header from "../components/Header.astro";
 
 const feed = await getFeed();
@@ -15,7 +16,7 @@ const { Content: BioContent } = await render(bio!);
 
 <Layout>
   <Header
-    backgroundSrc="/src/assets/images/forest-banner.jpg"
+    backgroundSrc={forestBanner.src}
     decorationSrc={wolfieRun.src}
     text="HyperWolfie"
   />

@@ -6,6 +6,7 @@ import { getFeed } from "../lib/posts";
 import PostWebmentions from "../components/PostWebmentions.astro";
 import Header from "../components/Header.astro";
 import wolfYell from "../assets/images/wolf-yell.gif";
+import cloverField from "../assets/images/beautiful-clover-field.jpeg";
 import SideNav from "../components/SideNav.astro";
 import Post from "../components/Post.astro";
 
@@ -23,7 +24,7 @@ const pathname = Astro.url.pathname;
 
 <Layout>
   <Header
-    backgroundSrc="/src/assets/images/beautiful-clover-field.jpeg"
+    backgroundSrc={cloverField.src}
     decorationSrc={wolfYell.src}
     text="Blog"
   />

@@ -100,7 +100,7 @@ position:relative;
 width:80%
 }
 .masking-tape{
-background:url(masking01.png) no-repeat center;
+background:url("/masking01.png") no-repeat center;
 height:50px;
 position:absolute;
 top:-25px;
@@ -108,7 +108,7 @@ width:100%
 }
 
 .paperclip {
-background:url(paperclip.png) no-repeat;
+background:url("/paperclip.png") no-repeat;
 height:62px;
 position:absolute;
 right:10px;
