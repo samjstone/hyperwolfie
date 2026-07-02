@@ -2,8 +2,13 @@
 import { getCollection, render } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
-import { getGroupedWebmentions, getWebmentions } from "../lib/webmentions";
 import { getFeed } from "../lib/posts";
+import PostWebmentions from "../components/PostWebmentions.astro";
+import Header from "../components/Header.astro";
+import wolfYell from "../assets/images/wolf-yell.gif";
+import cloverField from "../assets/images/beautiful-clover-field.jpeg";
+import SideNav from "../components/SideNav.astro";
+import Post from "../components/Post.astro";
 
 export async function getStaticPaths() {
   const posts = await getFeed();
@@ -14,39 +19,27 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
-const { Content } = await render(post);
-const { likes, reposts, replies, mentions } = await getGroupedWebmentions(post.id)
+const pathname = Astro.url.pathname;
 ---
+
 <Layout>
-  <div class="h-entry bg-light mb-5 p-5 rounded drop-shadow-2xl">
-    {post.data.photo.map((p) => (
-      <Image
-        src={p}
-        alt={"post image"}
-        inferSize
-        class="u-photo w-full h-auto"
-      />
-    ))}
-    <time class="dt-published" datetime={post.data.date.toISOString()}>
-      {post.data.date.toDateString()} - {post.data.title}
-    </time>
-    <p class="e-content">{post.body}</p>
-    <a
-      class="u-bridgy-fed"
-      href="https://fed.brid.gy/"
-      hidden="from-humans"
-    />
-    <a class="p-author h-card hidden" href="https://hyperwolfie.com/">HyperWolfie</a>
+  <Header
+    backgroundSrc={cloverField.src}
+    decorationSrc={wolfYell.src}
+    text="Blog"
+  />
+  <div class="flex flex-row gap-10 w-full">
+    <SideNav />
+    <div class="w-1/2">
+    <Post post={post} />
+    <div>
+      <PostWebmentions
+        pageUrl={`https://hyperwolfie.com${pathname}`}
+        server:defer
+      >
+        <div slot="fallback">Loading...</div>
+      </PostWebmentions>
+    </div>
+    </div>
   </div>
-  {
-    likes.map((like) => (
-      <div class="h-entry bg-light mb-5 p-5 rounded drop-shadow-2xl">
-        <a class="p-author h-card" href={like.data.author?.url}>
-          {like.data.author?.name}
-        </a>
-        <p class="e-content">{like.data.content?.text}</p>
-      </div>
-    ))
-  }
-  {}
 </Layout>

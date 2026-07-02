@@ -2,41 +2,21 @@
 import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
 import { getFeed } from "../../lib/posts";
+import SideNav from "../../components/SideNav.astro";
+import Post from "../../components/Post.astro";
+import wolfYell from "../../assets/images/wolf-yell.gif";
+import cloverField from "../../assets/images/beautiful-clover-field.jpeg";
+import Header from "../../components/Header.astro";
 
 const feed = await getFeed();
 ---
 
 <Layout>
-  <div class="flex flex-row gap-8 m-15 min-h-screen">
-    <main class="w-10/12">
-      {
-        feed.map((post) => (
-          <div class="h-entry bg-light mb-5 p-5 rounded drop-shadow-2xl">
-            {post.data.photo.map((p) => (
-              <Image
-                src={p}
-                alt={"post image"}
-                inferSize
-                class="u-photo w-full h-auto"
-              />
-            ))}
-            <time class="dt-published" datetime={post.data.date.toISOString()}>
-              {post.data.date.toDateString()} - {post.data.title}
-            </time>
-            <p class="e-content">{post.body}</p>
-            <a
-              class="u-bridgy-fed"
-              href="https://fed.brid.gy/"
-              hidden="from-humans"
-            />
-            <a href={`/${post.id}`}>Link to Post</a>
-            <a class="p-author h-card hidden" href="https://hyperwolfie.com/">HyperWolfie</a>
-          </div>
-        ))
-      }
-    </main>
-    <nav class="w-2/12">
-      <div class="bg-light h-50 p-5 rounded drop-shadow-2xl"></div>
-    </nav>
-  </div>
+    <Header backgroundSrc={cloverField.src} decorationSrc={wolfYell.src}  text="Blog"/>
+    <div class="flex flex-row gap-10 w-full">
+      <SideNav />
+      <main class="w-1/2">
+        {feed.map((post) => <Post post={post} />)}
+      </main>
+    </div>
 </Layout>

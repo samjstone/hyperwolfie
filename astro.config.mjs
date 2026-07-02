@@ -3,6 +3,8 @@ import { defineConfig } from "astro/config";
 
 import tailwindcss from "@tailwindcss/vite";
 
+import netlify from "@astrojs/netlify";
+
 // https://astro.build/config
 export default defineConfig({
   // `photo` URLs in posts can come from any host (syndicated feeds, etc.), so
@@ -10,7 +12,10 @@ export default defineConfig({
   image: {
     remotePatterns: [{ protocol: "https" }],
   },
+
   vite: {
     plugins: [tailwindcss()],
   },
+
+  adapter: netlify(),
 });

@@ -21,15 +21,32 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Fredoka";
+  src: url("/fonts/Fredoka.ttf") format("truetype");
+  font-weight: 300 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inconsolata";
+  src: url("/fonts/Inconsolata.ttf") format("truetype");
+  font-weight: 200 900;
+  font-style: normal;
+}
+
 @theme {
+  --font-sans: "Inconsolata", monospace;
   --font-title: "Kablammo", cursive;
   --font-macondo: "Macondo", cursive;
   --font-dela: "Dela Gothic One", sans-serif;
+  --font-fredoka: "Fredoka", sans-serif;
   --color-theme-orange: #ff803e;
   --color-theme-yellow: #f0cc4d;
   --color-theme-blue: #64afbd;
   --color-theme-green: #5ea35b;
-  --color-background: #322e2b;
+  --color-background: #99a556;
+  --color-theme-dark: #322e2b;
   --color-light: #fff3d6;
 }
 
@@ -60,6 +77,19 @@
     repeat-y;
 }
 
+.chat-bubble::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 1.5rem;
+  width: 15px;
+  height: 15px;
+  background: var(--color-light);
+  border-left: 1.5px solid var(--color-theme-dark);
+  border-bottom: 1.5px solid var(--color-theme-dark);
+  transform: translateX(-57%) rotate(45deg);
+}
+
 .box23{
 background:#ccb3a1; /* 背景色 */
 box-shadow:3px 3px 5px #666;
@@ -70,7 +100,7 @@ position:relative;
 width:80%
 }
 .masking-tape{
-background:url(masking01.png) no-repeat center;
+background:url("/masking01.png") no-repeat center;
 height:50px;
 position:absolute;
 top:-25px;
@@ -78,7 +108,7 @@ width:100%
 }
 
 .paperclip {
-background:url(paperclip.png) no-repeat;
+background:url("/paperclip.png") no-repeat;
 height:62px;
 position:absolute;
 right:10px;

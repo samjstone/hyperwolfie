@@ -1,0 +1,15 @@
+---
+const { backgroundSrc, decorationSrc, text } = Astro.props;
+---
+
+<header
+  class="outline-dotted outline-light header-frame mb-10 before:absolute before:inset-0 before:bg-yellow-100/8 before:content-[''] bg-cover rounded-xs content-end relative w-full align-text-bottom font-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl p-5 h-64 text-theme-orange"
+  style={`background-image: url(${backgroundSrc})`}
+>
+  <h1 class="drop-shadow-[2px_2px_3px_rgba(0,0,0,1)]">{text}</h1>
+  <img
+    class="absolute bottom-0 right-0 h-5/12 md:h-8/12 lg:h-full"
+    src={decorationSrc}
+    alt="Wolf running gif"
+  />
+</header>

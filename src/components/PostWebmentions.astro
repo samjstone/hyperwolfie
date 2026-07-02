@@ -1,0 +1,11 @@
+---
+import { getWebmentions } from "../server/getWebmentions";
+
+const { pageUrl } = Astro.props;
+
+const webmentions = await getWebmentions(pageUrl);
+---
+
+<div>
+  {webmentions.map((webmention) => <div class="text-white">{webmention.author.name} {webmention.content?.text}</div>)}
+</div>
