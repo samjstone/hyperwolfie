@@ -1,0 +1,43 @@
+---
+import { getWebmentions } from "../server/getWebmentions";
+import type { Webmention } from "../types/webmentions";
+import { Heart, Repeat2, MessageCircle } from "@lucide/astro";
+
+const webmentions = await getWebmentions(Astro.props.pageUrl);
+const { likes, reposts, replies } = webmentions.reduce(
+  (acc, webmention) => {
+    switch (webmention["wm-property"]) {
+      case "like-of":
+        acc.likes.push(webmention);
+        break;
+      case "repost-of":
+        acc.reposts.push(webmention);
+        break;
+      case "in-reply-to":
+        acc.replies.push(webmention);
+        break;
+    }
+    return acc;
+  },
+  { likes: [], reposts: [], replies: [] } as {
+    likes: Webmention[];
+    reposts: Webmention[];
+    replies: Webmention[];
+  }
+);
+---
+
+<div class="flex flex-row gap-4 text-theme-blue">
+  <div class="flex flex-row items-center gap-1 size-8">
+    <MessageCircle class="fill-theme-blue stroke-theme-blue" />
+    {replies.length}
+  </div>
+  <div class="flex flex-row items-center gap-1 size-8">
+    <Repeat2 class="stroke-theme-blue" />
+    {reposts.length}
+  </div>
+  <div class="flex flex-row items-center gap-1 size-8">
+    <Heart class="fill-theme-blue stroke-theme-blue" />
+    {likes.length}
+  </div>
+</div>

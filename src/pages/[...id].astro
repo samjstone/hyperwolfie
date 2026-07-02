@@ -2,8 +2,8 @@
 import { getCollection, render } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import { Image } from "astro:assets";
-import { getGroupedWebmentions, getWebmentions } from "../lib/webmentions";
 import { getFeed } from "../lib/posts";
+import PostWebmentions from "../components/PostWebmentions.astro";
 
 export async function getStaticPaths() {
   const posts = await getFeed();
@@ -15,7 +15,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { likes, reposts, replies, mentions } = await getGroupedWebmentions(post.id)
+const pathname =Astro.url.pathname;
 ---
 <Layout>
   <div class="h-entry bg-light mb-5 p-5 rounded drop-shadow-2xl">
@@ -38,15 +38,11 @@ const { likes, reposts, replies, mentions } = await getGroupedWebmentions(post.i
     />
     <a class="p-author h-card hidden" href="https://hyperwolfie.com/">HyperWolfie</a>
   </div>
-  {
-    likes.map((like) => (
-      <div class="h-entry bg-light mb-5 p-5 rounded drop-shadow-2xl">
-        <a class="p-author h-card" href={like.data.author?.url}>
-          {like.data.author?.name}
-        </a>
-        <p class="e-content">{like.data.content?.text}</p>
-      </div>
-    ))
-  }
-  {}
+
+<div>
+  <PostWebmentions pageUrl={`https://hyperwolfie.com${pathname}`} server:defer>
+    <div slot="fallback">Loading...</div>
+  </PostWebmentions>
+
+</div>
 </Layout>

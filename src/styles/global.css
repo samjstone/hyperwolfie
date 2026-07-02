@@ -21,15 +21,32 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Fredoka";
+  src: url("/fonts/Fredoka.ttf") format("truetype");
+  font-weight: 300 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inconsolata";
+  src: url("/fonts/Inconsolata.ttf") format("truetype");
+  font-weight: 200 900;
+  font-style: normal;
+}
+
 @theme {
+  --font-sans: "Inconsolata", monospace;
   --font-title: "Kablammo", cursive;
   --font-macondo: "Macondo", cursive;
   --font-dela: "Dela Gothic One", sans-serif;
+  --font-fredoka: "Fredoka", sans-serif;
   --color-theme-orange: #ff803e;
   --color-theme-yellow: #f0cc4d;
   --color-theme-blue: #64afbd;
   --color-theme-green: #5ea35b;
-  --color-background: #322e2b;
+  --color-background: #99a556;
+  --color-theme-dark: #322e2b;
   --color-light: #fff3d6;
 }
 
@@ -58,6 +75,36 @@
   background-repeat:
     no-repeat, no-repeat, no-repeat, no-repeat, repeat-x, repeat-x, repeat-y,
     repeat-y;
+}
+
+/* Speech-bubble tail on the left side, near the bottom. Two stacked triangles:
+   ::before is the dark outline layer, ::after is a slightly smaller light fill
+   on top. The light triangle's base is pushed 2px into the bubble so it also
+   covers the bubble's own edge outline at the mouth, leaving a clean opening. */
+.chat-bubble::before,
+.chat-bubble::after {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+/* dark outline layer: left-pointing triangle, base flush with the bubble edge */
+.chat-bubble::before {
+  left: -14px;
+  bottom: 1.5rem;
+  border-width: 12px 14px 12px 0;
+  border-color: transparent var(--color-theme-dark) transparent transparent;
+}
+
+/* light fill layer: 2px smaller so the dark shows as an outline, base pushed
+   2px past the edge to cover the bubble's outline across the mouth */
+.chat-bubble::after {
+  left: -12px;
+  bottom: calc(1.5rem + 2px);
+  border-width: 10px 14px 10px 0;
+  border-color: transparent var(--color-light) transparent transparent;
 }
 
 .box23{

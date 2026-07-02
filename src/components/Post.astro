@@ -1,0 +1,53 @@
+---
+import type { Post } from "../lib/posts";
+import { Image } from "astro:assets";
+import PostInteractions from "./PostInteractions.astro";
+
+interface Props {
+  post: Post;
+}
+
+const { post } = Astro.props as Props;
+---
+
+<div
+  class="chat-bubble h-entry bg-light mb-5 p-3 rounded-xs outline-2 outline-theme-dark outline-solid relative"
+>
+  <div class="outline-dotted outline-background p-5 mb-3 rounded-xs">
+    <a href={`/${post.id}`}>
+      <time
+        class="dt-published text-theme-orange"
+        datetime={post.data.date.toISOString()}
+      >
+        {
+          post.data.date.toLocaleDateString(undefined, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          })
+        }
+      </time>
+    </a>
+    {
+      post.data.photo.map((p) => (
+        <Image
+          src={p}
+          alt={"post image"}
+          inferSize
+          class="u-photo w-full h-auto"
+        />
+      ))
+    }
+    <p class="e-content">{post.body}</p>
+  </div>
+  <PostInteractions pageUrl={`https://hyperwolfie.com/${post.id}`} server:defer>
+    <div slot="fallback">Loading...</div>
+  </PostInteractions>
+
+  <a class="u-bridgy-fed" href="https://fed.brid.gy/" hidden="from-humans"></a>
+  <a class="p-author h-card hidden" href="https://hyperwolfie.com/">
+    HyperWolfie
+  </a>
+</div>

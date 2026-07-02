@@ -2,41 +2,30 @@
 import { Image } from "astro:assets";
 import Layout from "../../layouts/Layout.astro";
 import { getFeed } from "../../lib/posts";
+import SideNav from "../../components/SideNav.astro";
+import Post from "../../components/Post.astro";
+import wolfYell from "../../assets/images/wolf-yell.gif";
 
 const feed = await getFeed();
 ---
 
 <Layout>
-  <div class="flex flex-row gap-8 m-15 min-h-screen">
-    <main class="w-10/12">
-      {
-        feed.map((post) => (
-          <div class="h-entry bg-light mb-5 p-5 rounded drop-shadow-2xl">
-            {post.data.photo.map((p) => (
-              <Image
-                src={p}
-                alt={"post image"}
-                inferSize
-                class="u-photo w-full h-auto"
-              />
-            ))}
-            <time class="dt-published" datetime={post.data.date.toISOString()}>
-              {post.data.date.toDateString()} - {post.data.title}
-            </time>
-            <p class="e-content">{post.body}</p>
-            <a
-              class="u-bridgy-fed"
-              href="https://fed.brid.gy/"
-              hidden="from-humans"
-            />
-            <a href={`/${post.id}`}>Link to Post</a>
-            <a class="p-author h-card hidden" href="https://hyperwolfie.com/">HyperWolfie</a>
-          </div>
-        ))
-      }
-    </main>
-    <nav class="w-2/12">
-      <div class="bg-light h-50 p-5 rounded drop-shadow-2xl"></div>
-    </nav>
+  <div class="flex flex-col items-center min-h-screen m-15">
+    <header
+      class="outline-dotted outline-light header-frame mb-10 before:absolute before:inset-0 before:bg-yellow-100/8 before:content-[''] bg-[url(/src/assets/images/beautiful-clover-field.jpeg)] bg-cover rounded-xs content-end relative w-full align-text-bottom font-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl p-5 h-64 text-theme-orange"
+    >
+      <h1 class="drop-shadow-[2px_2px_3px_rgba(0,0,0,1)]">Blog</h1>
+      <img
+        class="absolute bottom-0 right-0 h-5/12 md:h-8/12 lg:h-full"
+        src={wolfYell.src}
+        alt="Wolf running gif"
+      />
+    </header>
+    <div class="flex flex-row gap-8 ">
+      <SideNav />
+      <main class="w-6/12">
+        {feed.map((post) => <Post post={post} />)}
+      </main>
+    </div>
   </div>
 </Layout>
