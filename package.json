@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "deploy": "wrangler deploy && npx --package @remy/webmention webmention https://hyperwolfie.com/feed.xml --limit 5 --send || true",
     "preview": "astro preview",
     "astro": "astro",
     "format": "prettier --write .",
@@ -15,6 +16,7 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^14.2.5",
+    "@astrojs/rss": "^4.0.19",
     "@lucide/astro": "^1.23.0",
     "@tailwindcss/vite": "^4.3.1",
     "astro": "^7.0.0",
