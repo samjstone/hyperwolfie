@@ -20,12 +20,10 @@ export async function GET(context) {
       description: (post.body ?? "").slice(0, 280),
       link: `/${post.id}`,
       pubDate: post.data.date,
-      // The fed.brid.gy link makes outgoing-webmention senders (remy's
-      // `webmention` CLI) deliver each new post to Bridgy Fed.
       content:
-        `<p>${escapeHtml(post.body ?? "")}</p>` +
+        `<div><p>${escapeHtml(post.body ?? "")}</p>` +
         post.data.photo.map((p) => `<img src="${p}" alt="" />`).join("") +
-        `<a href="https://fed.brid.gy/"></a>`,
+        `<a href="https://fed.brid.gy/"></a></div>`,
     })),
   });
 }
