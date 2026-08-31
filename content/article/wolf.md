@@ -1,4 +1,5 @@
 ---
+deleted: true
 type: entry
 title: wolf
 date: '2026-08-31T15:27:24.215Z'

@@ -1,4 +1,5 @@
 ---
+deleted: true
 type: entry
 title: Testing
 date: '2026-08-31T14:58:23.872Z'
