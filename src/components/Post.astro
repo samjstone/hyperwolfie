@@ -1,15 +1,17 @@
 ---
 import type { Post } from "../lib/posts";
+import { parse } from "node-html-parser";
+
 import PostInteractions from "./PostInteractions.astro";
-import { Heart, Repeat2, MessageCircle } from "@lucide/astro";
-import Article from "./posts/Article.astro";
-import Photo from "./posts/Photo.astro";
 
 interface Props {
   post: Post;
 }
 
 const { post } = Astro.props as Props;
+const root = parse(post.rendered?.html ?? "");
+root.querySelectorAll("img").forEach((el) => el.classList.add("u-photo"));
+
 ---
 
 <div
@@ -33,14 +35,17 @@ const { post } = Astro.props as Props;
       </time>
     </a>
     {
-      post.postType === "article" ? (
-        <Article post={post} />
-      ) : post.postType === "photo" ? (
-        <Photo post={post} />
-      ) : (
-        <p class="e-content">{post.body}</p>
-      )
+      post.data.photo.map((p) => (
+        <img
+          src={p}
+          alt={"post image"}
+          class="u-photo w-full h-auto"
+        />
+      ))
     }
+    <div class="e-content">
+      <div class="e-content" set:html={root.toString()} />
+    </div>
   </div>
   <PostInteractions pageUrl={`https://hyperwolfie.com/${post.id}`} server:defer>
     <PostInteractions slot="fallback" loading="true" />
@@ -51,3 +56,10 @@ const { post } = Astro.props as Props;
     HyperWolfie
   </a>
 </div>
+
+<style>
+  .e-content :global(img) {
+    border-radius: 0.25rem;
+    width: 50%;
+  }
+</style>
