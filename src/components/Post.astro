@@ -1,8 +1,9 @@
 ---
 import type { Post } from "../lib/posts";
-import { Image } from "astro:assets";
 import PostInteractions from "./PostInteractions.astro";
 import { Heart, Repeat2, MessageCircle } from "@lucide/astro";
+import Article from "./posts/Article.astro";
+import Photo from "./posts/Photo.astro";
 
 interface Props {
   post: Post;
@@ -32,16 +33,14 @@ const { post } = Astro.props as Props;
       </time>
     </a>
     {
-      post.data.photo.map((p) => (
-        <Image
-          src={p}
-          alt={"post image"}
-          inferSize
-          class="u-photo w-full h-auto"
-        />
-      ))
+      post.postType === "article" ? (
+        <Article post={post} />
+      ) : post.postType === "photo" ? (
+        <Photo post={post} />
+      ) : (
+        <p class="e-content">{post.body}</p>
+      )
     }
-    <p class="e-content">{post.body}</p>
   </div>
   <PostInteractions pageUrl={`https://hyperwolfie.com/${post.id}`} server:defer>
     <PostInteractions slot="fallback" loading="true" />

@@ -1,0 +1,23 @@
+---
+import type { Post } from "../../lib/posts";
+import { Image } from "astro:assets";
+
+interface Props {
+  post: Post;
+}
+const { post } = Astro.props as Props;
+---
+
+<>
+  {
+    post.data.photo.map((p) => (
+      <Image
+        src={p}
+        alt={"post image"}
+        inferSize
+        class="u-photo w-full h-auto"
+      />
+    ))
+  }
+  <p class="e-content">{post.body}</p>
+</>
