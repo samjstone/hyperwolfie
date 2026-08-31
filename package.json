@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
-    "deploy": "wrangler deploy && npx --package @remy/webmention webmention https://hyperwolfie.com/feed.xml --limit 5 --send || true",
+    "deploy": "wrangler deploy && sleep 20 && npx --package @remy/webmention webmention https://hyperwolfie.com/feed.xml --limit 5 --send || true",
     "preview": "astro preview",
     "astro": "astro",
     "format": "prettier --write .",
