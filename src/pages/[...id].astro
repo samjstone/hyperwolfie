@@ -1,9 +1,6 @@
 ---
-export const prerender = false;
-
 import Layout from "../layouts/Layout.astro";
 import { getFeed } from "../lib/posts";
-import { getWebmentions } from "../server/getWebmentions";
 import PostWebmentions from "../components/PostWebmentions.astro";
 import Header from "../components/Header.astro";
 import wolfYell from "../assets/images/wolf-yell.gif";
@@ -11,15 +8,15 @@ import cloverField from "../assets/images/beautiful-clover-field.jpeg";
 import SideNav from "../components/SideNav.astro";
 import Post from "../components/Post.astro";
 
-const { id } = Astro.params;
-const posts = await getFeed();
-const post = posts.find((p) => p.id === id);
-
-if (!post) {
-  return new Response(null, { status: 404, statusText: "Not found" });
+export async function getStaticPaths() {
+  const posts = await getFeed();
+  return posts.map((post) => ({
+    params: { id: post.id },
+    props: { post },
+  }));
 }
 
-const webmentions = await getWebmentions(`https://hyperwolfie.com/${post.id}`);
+const { post } = Astro.props;
 ---
 
 <Layout>
@@ -39,8 +36,13 @@ const webmentions = await getWebmentions(`https://hyperwolfie.com/${post.id}`);
           &larr; Back to Blog
         </div>
       </div>
-      <Post post={post} webmentions={webmentions} />
-      <PostWebmentions webmentions={webmentions} />
+      <Post post={post} />
+      <PostWebmentions
+        pageUrl={`https://hyperwolfie.com/${post.id}`}
+        server:defer
+      >
+        <div slot="fallback">Loading...</div>
+      </PostWebmentions>
     </div>
   </div>
 </Layout>

@@ -1,11 +1,13 @@
 ---
-import type { Webmention } from "../types/webmentions";
+import { getWebmentions } from "../server/getWebmentions";
 
 interface Props {
-  webmentions: Webmention[];
+  pageUrl: string;
 }
 
-const { webmentions } = Astro.props;
+const { pageUrl } = Astro.props;
+
+const webmentions = await getWebmentions(pageUrl);
 ---
 
 <div>
