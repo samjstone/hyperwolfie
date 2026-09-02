@@ -35,6 +35,7 @@ const webmentions = await Promise.all(
           <Post
             post={post}
             webmentions={webmentions[page.data.indexOf(post)]}
+            cutoff
           />
         ))
       }
