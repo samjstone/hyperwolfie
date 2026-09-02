@@ -1,23 +1,32 @@
 ---
 import type { Post } from "../lib/posts";
+import type { Webmention } from "../types/webmentions";
 import { parse } from "node-html-parser";
 
 import PostInteractions from "./PostInteractions.astro";
 
 interface Props {
   post: Post;
+  webmentions?: Webmention[];
 }
 
-const { post } = Astro.props as Props;
+const { post, webmentions } = Astro.props as Props;
 const root = parse(post.rendered?.html ?? "");
 root.querySelectorAll("img").forEach((el) => el.classList.add("u-photo"));
 
+const isCutoffText =
+  root.removeChild(root.querySelector("img")!)?.toString().length > 500;
+const cutoffText = root.toString().slice(0, 500);
+
+const currentPath = Astro.url.pathname;
+const isBlogPage = currentPath === "/blog";
 ---
 
 <div
   class="chat-bubble h-entry bg-light mb-5 p-3 rounded-xs outline-theme-dark outline-solid relative"
 >
   <div class="outline-dotted outline-background p-5 mb-3 rounded-xs">
+    <a class="u-url" href={`https://hyperwolfie.com/${post.id}`} hidden></a>
     <a href={`/${post.id}`}>
       <time
         class="dt-published text-theme-orange"
@@ -36,20 +45,33 @@ root.querySelectorAll("img").forEach((el) => el.classList.add("u-photo"));
     </a>
     {
       post.data.photo.map((p) => (
-        <img
-          src={p}
-          alt={"post image"}
-          class="u-photo w-full h-auto"
-        />
+        <img src={p} alt={"post image"} class="u-photo w-full h-auto" />
       ))
     }
     <div class="e-content">
-      <div class="e-content" set:html={root.toString()} />
+      {
+        isCutoffText && isBlogPage ? (
+          <>
+            <div set:html={cutoffText} />
+            <div class="mt-3 font-bold">
+              <a
+                href={`/${post.id}`}
+                class="text-theme-orange hover:text-theme-orange/80"
+              >
+                Read more...
+              </a>
+            </div>
+          </>
+        ) : (
+          <div set:html={root.toString()} />
+        )
+      }
     </div>
   </div>
-  <PostInteractions pageUrl={`https://hyperwolfie.com/${post.id}`} server:defer>
-    <PostInteractions slot="fallback" loading="true" />
-  </PostInteractions>
+  <PostInteractions
+    pageUrl={`https://hyperwolfie.com/${post.id}`}
+    webmentions={webmentions}
+  />
 
   <a class="u-bridgy-fed" href="https://fed.brid.gy/" hidden="from-humans"></a>
   <a class="p-author h-card hidden" href="https://hyperwolfie.com/">

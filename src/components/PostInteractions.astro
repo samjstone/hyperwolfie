@@ -1,71 +1,112 @@
 ---
-import { getWebmentions } from "../server/getWebmentions";
 import type { Webmention } from "../types/webmentions";
 import { Heart, Repeat2, MessageCircle } from "@lucide/astro";
 
-const { pageUrl, loading } = Astro.props;
-
-let webmentions = [] as Webmention[];
-if (!loading) {
-  webmentions = await getWebmentions(pageUrl);
+interface Props {
+  pageUrl: string;
+  webmentions?: Webmention[];
 }
 
-const { likes, reposts, replies } = webmentions.reduce(
-  (acc, webmention) => {
-    switch (webmention["wm-property"]) {
-      case "like-of":
-        acc.likes.push(webmention);
-        break;
-      case "repost-of":
-        acc.reposts.push(webmention);
-        break;
-      case "in-reply-to":
-        acc.replies.push(webmention);
-        break;
-    }
-    return acc;
-  },
-  { likes: [], reposts: [], replies: [] } as {
-    likes: Webmention[];
-    reposts: Webmention[];
-    replies: Webmention[];
-  }
-);
+const { pageUrl, webmentions } = Astro.props;
+
+const counts = webmentions
+  ? webmentions.reduce(
+      (acc, webmention) => {
+        switch (webmention["wm-property"]) {
+          case "like-of":
+            acc.likes++;
+            break;
+          case "repost-of":
+            acc.reposts++;
+            break;
+          case "in-reply-to":
+            acc.replies++;
+            break;
+        }
+        return acc;
+      },
+      { likes: 0, reposts: 0, replies: 0 },
+    )
+  : null;
 ---
 
-{
-  /* While the deferred island loads we don't know the real counts yet, so show a
-     neutral skeleton chip instead of a misleading "0" that would flip to the real value. */
-}
-<div class="flex flex-row gap-4 text-theme-blue">
+<div
+  class="flex flex-row gap-4 text-theme-blue"
+  data-webmentions={counts ? undefined : pageUrl}
+>
   <div class="flex flex-row items-center gap-1 h-8">
     <MessageCircle class="fill-theme-blue stroke-theme-blue shrink-0" />
     {
-      loading ? (
-        <span class="inline-block h-4 w-3 rounded-xs bg-theme-blue/20 animate-pulse" />
+      counts ? (
+        counts.replies
       ) : (
-        replies.length
+        <span
+          data-count="in-reply-to"
+          class="inline-block h-4 w-3 rounded-xs bg-theme-blue/20 animate-pulse"
+        />
       )
     }
   </div>
   <div class="flex flex-row items-center gap-1 h-8">
     <Repeat2 class="stroke-theme-blue shrink-0" />
     {
-      loading ? (
-        <span class="inline-block h-4 w-3 rounded-xs bg-theme-blue/20 animate-pulse" />
+      counts ? (
+        counts.reposts
       ) : (
-        reposts.length
+        <span
+          data-count="repost-of"
+          class="inline-block h-4 w-3 rounded-xs bg-theme-blue/20 animate-pulse"
+        />
       )
     }
   </div>
   <div class="flex flex-row items-center gap-1 h-8">
     <Heart class="fill-theme-blue stroke-theme-blue shrink-0" />
     {
-      loading ? (
-        <span class="inline-block h-4 w-3 rounded-xs bg-theme-blue/20 animate-pulse" />
+      counts ? (
+        counts.likes
       ) : (
-        likes.length
+        <span
+          data-count="like-of"
+          class="inline-block h-4 w-3 rounded-xs bg-theme-blue/20 animate-pulse"
+        />
       )
     }
   </div>
 </div>
+
+<script>
+  async function loadCounts(el: HTMLElement) {
+    const target = el.dataset.webmentions!;
+    let mentions: { "wm-property": string }[] = [];
+    try {
+      const res = await fetch(
+        `/api/webmentions?target=${encodeURIComponent(target)}`,
+      );
+      if (res.ok) mentions = await res.json();
+    } catch {
+      // leave counts at 0 if the fetch fails
+    }
+    el.querySelectorAll<HTMLElement>("[data-count]").forEach((span) => {
+      const count = mentions.filter(
+        (m) => m["wm-property"] === span.dataset.count,
+      ).length;
+      span.replaceWith(document.createTextNode(String(count)));
+    });
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        observer.unobserve(entry.target);
+        loadCounts(entry.target as HTMLElement);
+      }
+    },
+    { rootMargin: "200px" },
+  );
+
+  document
+    .querySelectorAll<HTMLElement>("[data-webmentions]")
+    .forEach((el) => observer.observe(el));
+</script>

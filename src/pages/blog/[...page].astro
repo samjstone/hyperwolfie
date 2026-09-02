@@ -1,0 +1,69 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { getFeed } from "../../lib/posts";
+import SideNav from "../../components/SideNav.astro";
+import Post from "../../components/Post.astro";
+import wolfYell from "../../assets/images/wolf-yell.gif";
+import cloverField from "../../assets/images/beautiful-clover-field.jpeg";
+import Header from "../../components/Header.astro";
+import type { GetStaticPaths } from "astro";
+import { getWebmentions } from "../../server/getWebmentions";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const feed = await getFeed();
+  return paginate(feed, { pageSize: 2 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+
+const webmentions = await Promise.all(
+  page.data.map((post) => getWebmentions(`https://hyperwolfie.com/${post.id}`)),
+);
+---
+
+<Layout>
+  <Header
+    backgroundSrc={cloverField.src}
+    decorationSrc={wolfYell.src}
+    text="Blog"
+  />
+  <div class="flex flex-row gap-10 w-full">
+    <SideNav />
+    <main class="w-1/2">
+      {
+        page.data.map((post) => (
+          <Post
+            post={post}
+            webmentions={webmentions[page.data.indexOf(post)]}
+          />
+        ))
+      }
+      <nav class="flex flex-row justify-between mb-5">
+        {
+          page.url.prev ? (
+            <a
+              href={page.url.prev}
+              class="hover:text-theme-orange/80 font-bold"
+            >
+              &larr; Newer
+            </a>
+          ) : (
+            <span />
+          )
+        }
+        {
+          page.url.next ? (
+            <a
+              href={page.url.next}
+              class="hover:text-theme-orange/80 font-bold"
+            >
+              Older &rarr;
+            </a>
+          ) : (
+            <span />
+          )
+        }
+      </nav>
+    </main>
+  </div>
+</Layout>
