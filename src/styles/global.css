@@ -85,8 +85,8 @@
   width: 15px;
   height: 15px;
   background: var(--color-light);
-  border-left: 1.5px solid var(--color-theme-dark);
-  border-bottom: 1.5px solid var(--color-theme-dark);
+  border-left: 2px solid var(--color-theme-dark);
+  border-bottom: 2px solid var(--color-theme-dark);
   transform: translateX(-57%) rotate(45deg);
 }
 

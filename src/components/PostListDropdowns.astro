@@ -1,0 +1,87 @@
+---
+import type { Post } from "../lib/posts";
+import { formatMonthDay } from "../utils/formatters";
+
+interface Props {
+  feed: Post[];
+}
+
+const { feed } = Astro.props as Props;
+
+type PostDataByMonth = Record<string, Post[]>;
+const postsByMonth = feed.reduce((acc, post) => {
+  const month = post.data.date.toLocaleString("default", { month: "long" });
+  const year = post.data.date.getFullYear();
+  const monthYear = `${month} ${year}`;
+
+  if (!acc[monthYear]) {
+    acc[monthYear] = [];
+  }
+  acc[monthYear].push(post);
+  return acc;
+}, {} as PostDataByMonth);
+
+const monthsFromPosts = Array.from(
+  new Set(
+    feed.map((post) => {
+      const month = post.data.date.toLocaleString("default", { month: "long" });
+      const year = post.data.date.getFullYear();
+      return `${month} ${year}`;
+    }),
+  ),
+);
+---
+
+<div>
+  {
+    monthsFromPosts.map((monthYear) => (
+      <div>
+        <div
+          id="date-dropdown-button"
+          class="cursor-pointer"
+          data-month-year={monthYear}
+        >
+          <div class="flex flex-row align-center justify-between text-theme-blue font-bold gap-2">
+            <h2>{monthYear}</h2>
+            <h2 id="dropdown-chevron">⌄</h2>
+          </div>
+        </div>
+
+        <div
+          id="date-dropdown-content"
+          data-month-year={monthYear}
+          class="hidden"
+        >
+          {postsByMonth[monthYear].map((post) => (
+            <div>{post.data.title || formatMonthDay(post.data.date)}</div>
+          ))}
+        </div>
+      </div>
+    ))
+  }
+</div>
+
+<script>
+  const handleDropdownClick = (event: Event) => {
+    const button = event.currentTarget as HTMLElement | null;
+    const monthYear = button?.dataset.monthYear;
+
+    if (!monthYear) {
+      return;
+    }
+    const dropdownContent = document.querySelector<HTMLDivElement>(
+      `#date-dropdown-content[data-month-year="${monthYear}"]`,
+    );
+    dropdownContent?.classList.toggle("hidden");
+    button?.querySelector("#dropdown-chevron")?.classList.toggle("rotate-180");
+  };
+
+  document.addEventListener("astro:page-load", () => {
+    const monthYearButtons = document.querySelectorAll<HTMLDivElement>(
+      "#date-dropdown-button",
+    );
+    monthYearButtons.forEach((button) => {
+      button.addEventListener("click", handleDropdownClick);
+    });
+  });
+</script>

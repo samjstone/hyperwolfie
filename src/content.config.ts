@@ -16,6 +16,7 @@ const post = defineCollection({
       draft: z.boolean().optional(),
       "post-status": z.string().optional(), // typically 'published' | 'draft'
       visibility: z.string().optional(), // typically 'public' | 'unlisted' | 'private'
+      title: z.string().optional(),
       // `category` is translated to `tags`; a single tag is a bare string and
       // several are an array — normalize to an array so templates can `.map()`.
       tags: z
