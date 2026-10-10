@@ -37,8 +37,8 @@ const { styles } = Astro.props as { styles?: string };
   </head>
   <body class=`bg-background ${styles}`>
     <div class="h-card hidden">
-      <a class="u-url p-name" rel="me" href="https://hyperwolfie.com/"
-        >HyperWolfie</a
+      <a class="u-url p-name" rel="me" href={Astro.site}>
+        HyperWolfie</a
       >
       <img
         class="u-photo"

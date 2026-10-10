@@ -1,14 +1,10 @@
 ---
-import Layout from "../../layouts/Layout.astro";
 import { getFeed } from "../../lib/posts";
 import type { GetStaticPaths } from "astro";
 import { getWebmentions } from "../../server/getWebmentions";
 import { parse } from "node-html-parser";
-import wolfYell from "../../assets/images/wolf-yell.gif";
-import linedPaper from "../../assets/backgrounds/lined-paper.jpg";
-import PostWebmentions from "../../components/PostWebmentions.astro";
-import PostListDropdowns from "../../components/PostListDropdowns.astro";
 import { formatDateTime } from "../../utils/formatters";
+import BlogLayout from "../../layouts/BlogLayout.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const feed = await getFeed();
@@ -17,122 +13,23 @@ export const getStaticPaths = (async ({ paginate }) => {
 
 const { page, feed } = Astro.props;
 
+const firstPost = page.data[0];
 const webmentions = await Promise.all(
-  page.data.map(async (post) => {
-    const webmentionData = await getWebmentions(
-      `https://hyperwolfie.com/${post.id}`,
-    );
-    return {
-      postId: post.id,
-      webmentions: webmentionData,
-    };
-  }),
+    await getWebmentions(
+      `${Astro.site}${firstPost.id}`,
+    )
 );
-interface PostData {
-  id: string;
-  date: Date;
-  dateFormatted: string;
-  photo: string[];
-  title: string | undefined;
-  html: string;
-}
 
-const posts = page.data.map((post) => {
-  const root = parse(post.rendered?.html ?? "");
+// Page size is 1, so its ok to use the first post
+  const root = parse(firstPost.rendered?.html ?? "");
   root.querySelectorAll("img").forEach((el) => el.classList.add("u-photo"));
-  return {
-    id: post.id,
-    date: post.data.date,
-    dateFormatted: formatDateTime(post.data.date),
-    photo: post.data.photo,
-    title: post.data.title,
+  const post =  {
+    id: firstPost.id,
+    date: firstPost.data.date,
+    dateFormatted: formatDateTime(firstPost.data.date),
+    photo: firstPost.data.photo,
+    title: firstPost.data.title,
     html: root.toString(),
   } as PostData;
-});
 ---
-
-<Layout styles="overflow-y-clip">
-  <img
-    class="absolute bottom-0 left-0 h-50 height-2"
-    src={wolfYell.src}
-    alt="Wolf yelling gif"
-  />
-  <h1
-    class="font-title text-[5rem] z-10 text-theme-orange drop-shadow-md drop-shadow-black absolute top-3 left-47"
-  >
-    Blog
-  </h1>
-  <div class="h-screen w-full flex justify-center items-center">
-    <div
-      class="chat-bubble relative bg-light w-[80%] h-[80%] p-12 rounded-sm border-solid border-2 border-black flex flex-col justify-center items-center"
-    >
-      <div class="w-full h-full rounded flex gap-7">
-        <div class="flex flex-col w-5/8">
-          <div
-            class="flex justify-between flex-col bg-cover border-2 border-dotted border-black h-full overflow-y-scroll p-5 scrollbar-thumb-theme-orange scrollbar-track-theme-green"
-            style={`background-image: url(${linedPaper.src})`}
-          >
-            {
-              posts.map((post) => (
-                <div>
-                  <a
-                    class="u-url"
-                    href={`https://hyperwolfie.com/${post.id}`}
-                    hidden
-                  />
-                  <div />
-                  <div class="pb-2 text-right">
-                    <time
-                      class="dt-published text-theme-orange font-bold "
-                      datetime={post.date.toISOString()}
-                    >
-                      {post.dateFormatted}
-                    </time>
-                  </div>
-                  <div set:html={post.html.toString()} />
-                </div>
-              ))
-            }
-          </div>
-          <div class="mt-2 flex font-bold justify-between text-theme-dark">
-            {
-              page.url.prev ? (
-                <a
-                  href={page.url.prev}
-                  class=" hover:underline hover:text-theme-orange"
-                >
-                  ← Newer
-                </a>
-              ) : (
-                <div />
-              )
-            }
-
-            {
-              page.url.next && (
-                <a
-                  href={page.url.next}
-                  class=" hover:underline hover:text-theme-orange"
-                >
-                  Older →
-                </a>
-              )
-            }
-          </div>
-        </div>
-        <div class="w-3/8 h-full gap-3 flex flex-col">
-          <div class="p-3 border-black border-solid border-3 h-5/8">
-            <PostListDropdowns feed={feed} />
-          </div>
-
-          <div class="p-3 border-black border-solid border-3 h-3/8">
-            <PostWebmentions
-              webmentions={webmentions.find((wm) => wm.postId === posts[0].id)
-                ?.webmentions || []}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div></Layout
->
+<BlogLayout post={post} feed={feed} webmentions={webmentions} page={page}/>

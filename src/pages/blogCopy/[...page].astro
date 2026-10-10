@@ -17,7 +17,7 @@ export const getStaticPaths = (async ({ paginate }) => {
 const { page } = Astro.props;
 
 const webmentions = await Promise.all(
-  page.data.map((post) => getWebmentions(`https://hyperwolfie.com/${post.id}`)),
+  page.data.map((post) => getWebmentions(`${Astro.site}${post.id}`)),
 );
 ---
 
