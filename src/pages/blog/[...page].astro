@@ -12,7 +12,6 @@ export const getStaticPaths = (async ({ paginate }) => {
 }) satisfies GetStaticPaths;
 
 const { page, feed } = Astro.props;
-
 const firstPost = page.data[0];
 const webmentions = await Promise.all(
     await getWebmentions(
