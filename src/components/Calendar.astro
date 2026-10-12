@@ -1,0 +1,164 @@
+---
+import type { Post } from "../lib/posts";
+
+interface CalendarProps {
+  feed: Post[];
+}
+const { feed } = Astro.props as CalendarProps;
+---
+
+<script type="module" src="https://unpkg.com/cally"></script>
+
+<script define:vars={{ feed }}>
+  document.addEventListener("astro:page-load", () => {
+    customElements.whenDefined("calendar-date").then(() => {
+      const datesWithPosts = feed.map(
+        (post) => new Date(post.data.date).toISOString().split("T")[0],
+      );
+      const calendar = document.querySelector("calendar-date");
+
+      if (calendar) {
+        // Set dates that have posts on them
+        calendar.isDateDisallowed = (date) => {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const day = String(date.getDate()).padStart(2, "0");
+          const formattedCalendarDate = `${year}-${month}-${day}`;
+
+          return datesWithPosts.includes(formattedCalendarDate) ? false : true;
+        };
+
+        calendar.getDayParts = (date) => {
+          const year = date.getFullYear();
+          const month = String(date.getMonth() + 1).padStart(2, "0");
+          const day = String(date.getDate()).padStart(2, "0");
+          const formattedCalendarDate = `${year}-${month}-${day}`;
+
+          return datesWithPosts.includes(formattedCalendarDate)
+            ? "datesWithPosts"
+            : "";
+        };
+
+        const datesWithPostLinks = {};
+
+        datesWithPosts.forEach((date) => {
+          const postsForDate = feed.filter((post) => {
+            const postDate = new Date(post.data.date)
+              .toISOString()
+              .split("T")[0];
+            return postDate === date;
+          });
+
+          // Generate the HTML string for this specific date
+          const postLinks = postsForDate
+            .map(
+              (post) =>
+                `<a href="/${post.id}" class="hover:underline">${post.data.title || `${post.id}`}</a>`,
+            )
+            .join("");
+
+          datesWithPostLinks[date] = postLinks;
+        });
+
+        // Add click event listener to navigate to the post for that date
+        const postListDiv = document.querySelector(".postListForDate");
+        const toKey = (d) => d.toLocaleDateString("en-CA");
+
+        calendar.addEventListener("focusday", (event) => {
+          // clear unless focus is just on the selected day
+          if (toKey(event.detail) !== calendar.value) {
+            postListDiv.innerHTML = "";
+            postListDiv.classList.add("hidden");
+          }
+        });
+
+        calendar.addEventListener("change", (event) => {
+          postListDiv.innerHTML = "";
+          const selectedDate = event.target.value;
+          const postLinks = datesWithPostLinks[selectedDate];
+          if (postLinks) {
+            if (postListDiv) {
+              postListDiv.innerHTML = postLinks;
+              postListDiv.classList.add("flex");
+              postListDiv.classList.remove("hidden");
+            }
+          }
+        });
+      }
+    });
+  });
+</script>
+
+<style is:global>
+  calendar-date {
+    svg {
+      height: 16px;
+      width: 16px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.5;
+    }
+
+    path {
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    font-color: black;
+  }
+
+  calendar-month {
+    --color-accent: var(--color-theme-blue);
+    --color-text-on-accent: #ffffff;
+    font-size: 0.85rem;
+    font-color: black;
+  }
+
+  calendar-month::part(th),
+  calendar-month::part(td) {
+    padding: 0.01rem;
+  }
+
+  calendar-month::part(datesWithPosts) {
+    background: var(--color-theme-orange);
+    color: var(--color-text-on-accent);
+    border-radius: 50%; /* Optional: Makes highlighted dates nice circles */
+  }
+
+  calendar-date::part(container),
+  calendar-range::part(container) {
+    /* Your styles here */
+    gap: 0;
+  }
+
+  calendar-month::part(datesWithPosts selected) {
+    background: var(--color-accent);
+    color: var(--color-text-on-accent);
+    outline: 2px solid var(--color-theme-orange); /* optional: keeps a hint it has a post */
+  }
+</style>
+
+<calendar-date locale="en-GB">
+  <svg
+    aria-label="Previous"
+    slot="previous"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+  >
+    <path d="M15.75 19.5 8.25 12l7.5-7.5"></path>
+  </svg>
+  <svg
+    aria-label="Next"
+    slot="next"
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+  >
+    <path d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
+  </svg>
+  <calendar-month></calendar-month>
+</calendar-date>
+
+<div
+  class="postListForDate flex-col text-black drop-shadow-sm bg-theme-yellow mt-2 rounded-sm mb-1 hidden p-1"
+>
+</div>
+<div class="invisible">.</div>

@@ -1,48 +1,34 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import BlogLayout from "../layouts/BlogLayout.astro";
 import { getFeed } from "../lib/posts";
-import PostWebmentions from "../components/PostWebmentions.astro";
-import Header from "../components/Header.astro";
-import wolfYell from "../assets/images/wolf-yell.gif";
-import cloverField from "../assets/images/beautiful-clover-field.jpeg";
-import SideNav from "../components/SideNav.astro";
-import Post from "../components/Post.astro";
+import { getWebmentions } from "../server/getWebmentions";
+import { formatDateTime } from "../utils/formatters";
+import { parse } from "node-html-parser";
 
 export async function getStaticPaths() {
-  const posts = await getFeed();
-  return posts.map((post) => ({
+  const feed = await getFeed();
+  return feed.map((post) => ({
     params: { id: post.id },
-    props: { post },
+    props: { post, feed },
   }));
 }
 
-const { post } = Astro.props;
----
+const { post, feed } = Astro.props;
+const webmentions = await Promise.all(
+    await getWebmentions(
+      `${Astro.site}${post.id}`,
+    )
+);
 
-<Layout>
-  <Header
-    backgroundSrc={cloverField.src}
-    decorationSrc={wolfYell.src}
-    text="Blog"
-  />
-  <div class="flex flex-row gap-10 w-full">
-    <SideNav />
-    <div class="w-1/2">
-      <div class="mb-2">
-        <div
-          onclick="window.history.back()"
-          class="hover:text-theme-orange/80 font-bold"
-        >
-          &larr; Back to Blog
-        </div>
-      </div>
-      <Post post={post} />
-      <PostWebmentions
-        pageUrl={`https://hyperwolfie.com/${post.id}`}
-        server:defer
-      >
-        <div slot="fallback">Loading...</div>
-      </PostWebmentions>
-    </div>
-  </div>
-</Layout>
+  const root = parse(post.rendered?.html ?? "");
+  root.querySelectorAll("img").forEach((el) => el.classList.add("u-photo"));
+  const postData =  {
+    id: post.id,
+    date: post.data.date,
+    dateFormatted: formatDateTime(post.data.date),
+    photo: post.data.photo,
+    title: post.data.title,
+    html: root.toString(),
+  } as PostData;
+---
+<BlogLayout post={postData} feed={feed} webmentions={webmentions} page={null}/>

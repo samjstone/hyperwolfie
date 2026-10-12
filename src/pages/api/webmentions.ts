@@ -5,7 +5,7 @@ import { getWebmentions } from "../../server/getWebmentions";
 
 export const GET: APIRoute = async ({ url }) => {
   const target = url.searchParams.get("target");
-  if (!target?.startsWith("https://hyperwolfie.com/")) {
+  if (!target?.startsWith("https://hyperwolfie.com")) {
     return new Response("[]", {
       status: 400,
       headers: { "Content-Type": "application/json" },
