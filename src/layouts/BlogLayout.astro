@@ -4,6 +4,11 @@ import PostWebmentions from "../components/PostWebmentions.astro";
 import Layout from "./Layout.astro";
 import wolfYell from "../assets/images/wolf-yell.gif";
 import linedPaper from "../assets/backgrounds/lined-paper.jpg";
+import dirt from "../assets/backgrounds/dirt.jpg";
+import grassHills from "../assets/backgrounds/grass-hills.jpg";
+import mountainForest from "../assets/backgrounds/mountain-forest.jpg";
+import wolfHowlMini from "../assets/images/wolf-howl-mini.gif";
+import leaves from "../assets/images/leaves.png";
 import type { Post } from "../lib/posts";
 import type { Webmention } from "../types/webmentions";
 import type { Page } from "astro";
@@ -29,7 +34,10 @@ const prevPostUrl =
   page?.url.prev ?? (prevFeedPost ? `/${prevFeedPost?.id}` : null);
 ---
 
-<Layout styles="overflow-y-clip">
+<Layout
+  styles="overflow-y-clip bg-cover bg-no-repeat bg-center"
+  bgImage={mountainForest.src}
+>
   <img
     class="absolute bottom-0 left-0 h-50 height-2"
     src={wolfYell.src}
@@ -37,19 +45,32 @@ const prevPostUrl =
   />
   <a href="/blog" class="hover:pointer">
     <h1
-      class="font-title text-[5rem] z-10 text-theme-orange drop-shadow-md drop-shadow-black absolute top-3 left-47"
+      class="font-title text-[5rem] z-10 text-theme-orange drop-shadow-md drop-shadow-black absolute top-6 left-47"
     >
       Blog
     </h1>
   </a>
-  <div class="h-screen w-full flex justify-center items-center">
+  <div class="h-screen w-full flex justify-center items-center mt-3">
     <div
       class="chat-bubble relative bg-light w-[80%] h-[80%] p-12 rounded-sm border-solid border-2 border-black flex flex-col justify-center items-center"
+      style={`
+      border-image-source: url(${leaves.src});
+border-image-slice: 591 658 27 308;
+border-image-width: 32px 45px 20px 24px;
+border-image-repeat: repeat round;
+      `}
     >
+      <div
+        class="fixed self-start -ml-12 top-0 text-white z-10 font-bold text-[1rem] p-3"
+      >
+        <a href="/" class="hover:underline">
+          {`<- Home`}
+        </a>
+      </div>
       <div class="w-full h-full rounded flex gap-7">
         <div class="flex flex-col w-5/8">
           <div
-            class="flex justify-between flex-col bg-cover border-2 border-dotted border-black h-full overflow-y-scroll p-5 scrollbar-thumb-theme-orange scrollbar-track-theme-green"
+            class="flex justify-between flex-col bg-cover border-2 border-dotted border-black h-full overflow-y-scroll p-5 [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:bg-theme-orange [&::-webkit-scrollbar-thumb]:border-sm"
             style={`background-image: url(${linedPaper.src})`}
           >
             <div>
@@ -96,14 +117,23 @@ const prevPostUrl =
           </div>
         </div>
         <div class="w-3/8 h-full gap-3 flex flex-col">
-          <div class="p-3 border-black border-solid border-3 h-7/8">
-            <!-- <PostListDropdowns feed={feed} /> -->
-            <div transition:persist="calendar">
+          <img
+            src={wolfHowlMini.src}
+            class="w-30 absolute right-12 z-1 drop-shadow-lg drop-shadow-theme-blue"
+          />
+          <div
+            class="relative overflow-y-scroll bg-cover flex justify-center p-5 border-black border-double border-4 h-7/8 [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:bg-theme-blue [&::-webkit-scrollbar-thumb]:border-sm"
+            style={`background-image: url(${grassHills.src})`}
+          >
+            <div transition:persist="calendar" class="z-10">
               <Calendar feed={feed} />
             </div>
           </div>
 
-          <div class="p-3 border-black border-solid border-3 h-2/8">
+          <div
+            class="p-3 text-white border-black bg-repeat border-3 h-2/8 overflow-y-scroll [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-theme-dark [&::-webkit-scrollbar-thumb]:bg-theme-blue [&::-webkit-scrollbar-thumb]:border-sm"
+            style={`background-image: url(${dirt.src}); border-style: ridge`}
+          >
             <PostWebmentions webmentions={webmentions ?? []} />
           </div>
         </div>

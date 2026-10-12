@@ -11,7 +11,7 @@ const { webmentions } = Astro.props;
 <div>
   {
     webmentions.map((webmention) => (
-      <div class="text-black">
+      <div >
         {webmention.author.name} {webmention.content?.text}
       </div>
     ))
