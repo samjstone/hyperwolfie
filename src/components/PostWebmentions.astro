@@ -1,19 +1,17 @@
 ---
-import { getWebmentions } from "../server/getWebmentions";
+import type { Webmention } from "../types/webmentions";
 
 interface Props {
-  pageUrl: string;
+  webmentions: Webmention[]
 }
 
-const { pageUrl } = Astro.props;
-
-const webmentions = await getWebmentions(pageUrl);
+const { webmentions } = Astro.props;
 ---
 
 <div>
   {
     webmentions.map((webmention) => (
-      <div class="text-white">
+      <div >
         {webmention.author.name} {webmention.content?.text}
       </div>
     ))

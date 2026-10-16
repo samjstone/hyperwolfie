@@ -1,70 +1,34 @@
 ---
-import Layout from "../../layouts/Layout.astro";
 import { getFeed } from "../../lib/posts";
-import SideNav from "../../components/SideNav.astro";
-import Post from "../../components/Post.astro";
-import wolfYell from "../../assets/images/wolf-yell.gif";
-import cloverField from "../../assets/images/beautiful-clover-field.jpeg";
-import Header from "../../components/Header.astro";
 import type { GetStaticPaths } from "astro";
 import { getWebmentions } from "../../server/getWebmentions";
+import { parse } from "node-html-parser";
+import { formatDateTime } from "../../utils/formatters";
+import BlogLayout from "../../layouts/BlogLayout.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const feed = await getFeed();
-  return paginate(feed, { pageSize: 2 });
+  return paginate(feed, { pageSize: 1, props: { feed } });
 }) satisfies GetStaticPaths;
 
-const { page } = Astro.props;
-
+const { page, feed } = Astro.props;
+const firstPost = page.data[0];
 const webmentions = await Promise.all(
-  page.data.map((post) => getWebmentions(`https://hyperwolfie.com/${post.id}`)),
+    await getWebmentions(
+      `${Astro.site}${firstPost.id}`,
+    )
 );
----
 
-<Layout>
-  <Header
-    backgroundSrc={cloverField.src}
-    decorationSrc={wolfYell.src}
-    text="Blog"
-  />
-  <div class="flex flex-row gap-10 w-full">
-    <SideNav />
-    <main class="w-1/2">
-      {
-        page.data.map((post) => (
-          <Post
-            post={post}
-            webmentions={webmentions[page.data.indexOf(post)]}
-            cutoff
-          />
-        ))
-      }
-      <nav class="flex flex-row justify-between mb-5">
-        {
-          page.url.prev ? (
-            <a
-              href={page.url.prev}
-              class="hover:text-theme-orange/80 font-bold"
-            >
-              &larr; Newer
-            </a>
-          ) : (
-            <span />
-          )
-        }
-        {
-          page.url.next ? (
-            <a
-              href={page.url.next}
-              class="hover:text-theme-orange/80 font-bold"
-            >
-              Older &rarr;
-            </a>
-          ) : (
-            <span />
-          )
-        }
-      </nav>
-    </main>
-  </div>
-</Layout>
+// Page size is 1, so its ok to use the first post
+  const root = parse(firstPost.rendered?.html ?? "");
+  root.querySelectorAll("img").forEach((el) => el.classList.add("u-photo"));
+  const post =  {
+    id: firstPost.id,
+    date: firstPost.data.date,
+    dateFormatted: formatDateTime(firstPost.data.date),
+    photo: firstPost.data.photo,
+    title: firstPost.data.title,
+    html: root.toString(),
+  } as PostData;
+---
+<BlogLayout post={post} feed={feed} webmentions={webmentions} page={page}/>
