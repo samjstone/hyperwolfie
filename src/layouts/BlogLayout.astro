@@ -52,7 +52,7 @@ const prevPostUrl =
   </a>
   <div class="h-screen w-full flex justify-center items-center mt-3">
     <div
-      class="chat-bubble relative bg-light w-[80%] h-[80%] p-12 rounded-sm border-solid border-2 border-black flex flex-col justify-center items-center"
+      class="text-bubble relative bg-light w-[80%] h-[80%] p-12 rounded-sm border-solid border-2 border-black flex flex-col justify-center items-center"
       style={`
       border-image-source: url(${leaves.src});
 border-image-slice: 591 658 27 308;
@@ -86,7 +86,7 @@ border-image-repeat: repeat round;
                 >
                   {post.dateFormatted}
                 </time>
-              </div>
+              </div >
               <div set:html={post.html.toString()} />
             </div>
           </div>

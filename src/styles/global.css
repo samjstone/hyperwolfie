@@ -78,7 +78,7 @@
     repeat-y;
 }
 
-.chat-bubble::before {
+.text-bubble::before {
   content: "";
   position: absolute;
   left: 0;
