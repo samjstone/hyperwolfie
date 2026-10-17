@@ -1,0 +1,18 @@
+---
+export interface MenuItem {
+    title: string;
+    href?: string;
+}
+
+interface MenuProps {
+    menuItems: MenuItem[]
+    styles?: string
+}
+const {styles, menuItems} = Astro.props as MenuProps
+---
+<ul class=` menu menu-vertical ${styles}`>
+    {menuItems.map((item) => (
+            item.href ? <a class="hover:text-theme-green hover:underline" href={item.href}>{item.title}</a>
+            :<a class="text-gray-500">{item.title}</a> 
+          ))}
+</ul>

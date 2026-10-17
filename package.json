@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "stop": "astro dev stop",
     "deploy": "wrangler deploy && sleep 20 && npx --package @remy/webmention webmention https://hyperwolfie.com/feed.xml --limit 5 --send || true",
     "preview": "astro preview",
     "astro": "astro",
@@ -20,11 +21,18 @@
     "@lucide/astro": "^1.23.0",
     "@tailwindcss/vite": "^4.3.1",
     "astro": "^7.0.0",
+    "astro-icon": "^1.2.0",
     "cally": "^0.9.2",
     "node-html-parser": "^9.0.2",
     "prettier": "^3.8.4",
     "tailwindcss": "^4.3.1",
     "wrangler": "^4.127.0",
     "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@iconify-json/lucide": "^1.2.145",
+    "@iconify-json/mdi": "^1.2.3",
+    "astro-iconset": "^0.0.6",
+    "daisyui": "^5.7.50"
   }
 }

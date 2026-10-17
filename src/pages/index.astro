@@ -9,15 +9,46 @@ import forestStrip from "../assets/images/forest-strip.png";
 import grassField from "../assets/images/grass-field.png";
 import waterfall from "../assets/images/waterfall.png";
 import wolfPackHowl from "../assets/images/wolf-pack-howl.gif";
+import Menu, { type MenuItem } from "../components/Menu.astro";
+import { Icon } from "astro-icon/components";
+
+const menuItems: MenuItem[] = [
+  {
+    title: "About",
+  },
+  {
+    title: "Blog",
+    href: "/blog",
+  },
+  {
+    title: "Art",
+  },
+  {
+    title: "Plushies",
+  },
+  { title: "Shrines" },
+];
 ---
 
-<Layout
-  styles="p-20 bg-cover bg-no-repeat bg-center"
-  bgImage={yellowstoneBackground.src}
->
-  <div class="h-full flex flex-row w-8/12">
+<script>
+  const navButton = document.querySelector(".nav-button");
+  const navMenu = document.querySelector(".nav-menu");
+  if (navButton && navMenu) {
+    navButton.addEventListener("click", (event) => {
+      navMenu.classList.toggle("hidden");
+    });
+  }
+</script>
+
+<Layout styles="p-5 lg:p-20">
+  <div
+    class="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
+    style=`background-image: url(${yellowstoneBackground.src})`
+  >
+  </div>
+  <div class="h-full flex flex-row lg:w-8/12">
     <div
-      class="w-3/12 bg-light rounded-sm border-double border-6 border-theme-dark"
+      class="hidden md:block w-3/12 bg-light rounded-sm border-double border-6 border-theme-dark"
     >
       <div
         style={`background-image: url(${cuteWolf.src})`}
@@ -34,30 +65,39 @@ import wolfPackHowl from "../assets/images/wolf-pack-howl.gif";
         <h2 class="font-fredoka text-theme-blue font-bold text-2xl mb-1">
           Navigation 🐾
         </h2>
-        <div class="flex flex-col text-lg">
-          <a class="text-gray-500">About</a>
-          <a class="hover:text-theme-green hover:underline" href="/blog">Blog</a
-          >
-          <a class="text-gray-500">Art</a>
-          <a class="text-gray-500">Plushies</a>
-          <a class="text-gray-500">Shrines</a>
-        </div>
+        <Menu menuItems={menuItems} styles="text-xl" />
       </nav>
     </div>
-    <div class="flex flex-col w-9/12">
-      <div class="flex flex-row items-center justify-start w-full">
+    <div class="flex flex-col w-full md:w-9/12">
+      <div
+        class="flex flex-row items-center justify-center md:justify-start w-full"
+      >
         <img src={wolfWalk.src} alt="Wolf running gif" class="h-10/12" />
         <h1
-          class="font-title text-5xl drop-shadow-[2px_2px_3px_rgba(0,0,0,1)] text-theme-orange"
+          class="font-title text-4xl sm:text-5xl drop-shadow-[2px_2px_3px_rgba(0,0,0,1)] text-theme-orange"
           style="line-height: unset;"
         >
           HYPERWOLFIE
         </h1>
         <img src={wolfWalk.src} alt="Wolf running gif" class="h-8/12" />
       </div>
+      <div class=" w-full">
+        <button
+          class="sm:hidden nav-button w-full bg-radial to-theme-blue from-white p-2 border-3 border-dotted"
+          ><div
+            class="flex font-bold flex-row items-center justify-between font-fredoka"
+          >
+            Navigation 🐾 <Icon name="lucide:chevron-down" />
+          </div></button
+        >
+        <Menu
+          menuItems={menuItems}
+  styles="nav-menu hidden md:hidden sm:flex sm:menu-horizontal sm:justify-around font-macondo text-xl bg-light w-full border-double border-theme-dark border-x-6 border-t-6"
+        />
+      </div>
       <div class="flex flex-row">
         <main
-          class="flex flex-3 flex-col bg-light h-full rounded-r-sm border-double border-y-6 border-r-6 border-theme-dark p-3"
+          class="flex flex-3 flex-col bg-light h-full rounded-r-sm border-6 md:border-0 border-double md:border-y-6 md:border-r-6 border-theme-dark p-3"
         >
           <img
             src={forestStrip.src}
@@ -83,11 +123,31 @@ import wolfPackHowl from "../assets/images/wolf-pack-howl.gif";
             />
           </div>
         </main>
-        <div class="flex-1">
-          <img src={waterfall.src} alt="waterfall" class="h-full drop-shadow-[0px_3px_2px_rgba(0,0,0,1)]" />
-          <img src={wolfPackHowl.src} alt="Howling wolves" class="absolute self-end h-24 drop-shadow-[0px_3px_2px_rgba(0,0,0,1)]" />
+        <div class="hidden md:block flex-1">
+          <img
+            src={waterfall.src}
+            alt="waterfall"
+            class="h-full drop-shadow-[0px_3px_2px_rgba(0,0,0,1)]"
+          />
+          <img
+            src={wolfPackHowl.src}
+            alt="Howling wolves"
+            class="absolute self-end h-24 drop-shadow-[0px_3px_2px_rgba(0,0,0,1)]"
+          />
         </div>
       </div>
     </div>
+  </div>
+  <div class="md:hidden self-center">
+    <img
+      src={waterfall.src}
+      alt="waterfall"
+      class="h-full drop-shadow-[0px_3px_2px_rgba(0,0,0,1)]"
+    />
+    <img
+      src={wolfPackHowl.src}
+      alt="Howling wolves"
+      class="h-20 shrink-0 absolute self-end drop-shadow-[0px_3px_2px_rgba(0,0,0,1)]"
+    />
   </div>
 </Layout>
