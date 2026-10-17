@@ -1,49 +1,93 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import { getEntry, render } from "astro:content";
-import { getFeed } from "../lib/posts";
-import SideNav from "../components/SideNav.astro";
 import wolfieRun from "../assets/images/wolfie-run.gif";
 import wolfWalk from "../assets/images/wolf-walk.gif";
-import forestBanner from "../assets/images/forest-banner.jpg";
-import Header from "../components/Header.astro";
-
-const feed = await getFeed();
-
-const bio = await getEntry("site", "bio");
-const { Content: BioContent } = await render(bio!);
+import cuteWolf from "../assets/images/cute-wolf-sit.png";
+import flowerField from "../assets/images/flower-field.png";
+import yellowstoneBackground from "../assets/backgrounds/yellowstone-bg.jpg";
+import forestStrip from "../assets/images/forest-strip.png";
+import grassField from "../assets/images/grass-field.png";
+import waterfall from "../assets/images/waterfall.png";
+import wolfPackHowl from "../assets/images/wolf-pack-howl.gif";
 ---
 
-<Layout styles="p-10">
-  <Header
-    backgroundSrc={forestBanner.src}
-    decorationSrc={wolfieRun.src}
-    text="HyperWolfie"
-  />
-  <div class="flex flex-row justify-between w-full gap-5">
-    <SideNav />
-    <div class="flex flex-col gap-5 w-1/2">
-      <main class="relative">
-        <div
-          class="outline-solid outline-theme-dark bg-light h-50 p-5 rounded-xs relative"
-        >
-          <div
-            class="outline-dotted outline-background h-full rounded-xs overflow-x-scroll p-2"
+<Layout
+  styles="p-20 bg-cover bg-no-repeat bg-center"
+  bgImage={yellowstoneBackground.src}
+>
+  <div class="h-full flex flex-row w-8/12">
+    <div
+      class="w-3/12 bg-light rounded-sm border-double border-6 border-theme-dark"
+    >
+      <div
+        style={`background-image: url(${cuteWolf.src})`}
+        class="h-48 w-full bg-cover bg-no-repeat relative"
+      >
+        <img
+          src={flowerField.src}
+          alt="Flower field"
+          class="align-bottom absolute bottom-0"
+          style="filter: drop-shadow(1px -1px 2px #000000);"
+        />
+      </div>
+      <nav class="p-2 font-macondo flex flex-col mt-3">
+        <h2 class="font-fredoka text-theme-blue font-bold text-2xl mb-1">
+          Navigation 🐾
+        </h2>
+        <div class="flex flex-col text-lg">
+          <a class="text-gray-500">About</a>
+          <a class="hover:text-theme-green hover:underline" href="/blog">Blog</a
           >
-            <img
-              src={wolfWalk.src}
-              alt="A gif of a wolf walking"
-              class="float-left w-20"
-            />
-            <BioContent />
-          </div>
+          <a class="text-gray-500">Art</a>
+          <a class="text-gray-500">Plushies</a>
+          <a class="text-gray-500">Shrines</a>
         </div>
-        <div class="masking-tape"></div>
-      </main>
-      <div class="bg-light h-50 p-5 rounded-xs"></div>
+      </nav>
     </div>
-    <div class="w-3/12">
-      <div class="bg-light">MENU</div>
+    <div class="flex flex-col w-9/12">
+      <div class="flex flex-row items-center justify-start w-full">
+        <img src={wolfWalk.src} alt="Wolf running gif" class="h-10/12" />
+        <h1
+          class="font-title text-5xl drop-shadow-[2px_2px_3px_rgba(0,0,0,1)] text-theme-orange"
+          style="line-height: unset;"
+        >
+          HYPERWOLFIE
+        </h1>
+        <img src={wolfWalk.src} alt="Wolf running gif" class="h-8/12" />
+      </div>
+      <div class="flex flex-row">
+        <main
+          class="flex flex-3 flex-col bg-light h-full rounded-r-sm border-double border-y-6 border-r-6 border-theme-dark p-3"
+        >
+          <img
+            src={forestStrip.src}
+            alt="Forest"
+            class="w-full rounded-b-sm self-center"
+          />
+          <div class="border-3 border-dotted border-theme-dark mt-3 rounded-sm">
+            <img
+              src={wolfieRun.src}
+              class="h-32 float-left m-2"
+              alt="wolf running"
+            />
+            <p class="m-2">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+              enim ad minim veniam, quis nostrud exercitation ullamco laboris
+              nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
+            </p>
+            <img
+              src={grassField.src}
+              alt="strip of grass"
+              class="h-24 justify-self-end"
+            />
+          </div>
+        </main>
+        <div class="flex-1">
+          <img src={waterfall.src} alt="waterfall" class="h-full drop-shadow-[0px_3px_2px_rgba(0,0,0,1)]" />
+          <img src={wolfPackHowl.src} alt="Howling wolves" class="absolute self-end h-24 drop-shadow-[0px_3px_2px_rgba(0,0,0,1)]" />
+        </div>
+      </div>
     </div>
   </div>
 </Layout>
