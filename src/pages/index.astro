@@ -10,7 +10,7 @@ import grassField from "../assets/images/grass-field.png";
 import waterfall from "../assets/images/waterfall.png";
 import wolfPackHowl from "../assets/images/wolf-pack-howl.gif";
 import Menu, { type MenuItem } from "../components/Menu.astro";
-import { Icon } from "astro-icon/components";
+import DropdownButton from "../components/DropdownButton.astro";
 
 const menuItems: MenuItem[] = [
   {
@@ -30,23 +30,13 @@ const menuItems: MenuItem[] = [
 ];
 ---
 
-<script>
-  const navButton = document.querySelector(".nav-button");
-  const navMenu = document.querySelector(".nav-menu");
-  if (navButton && navMenu) {
-    navButton.addEventListener("click", (event) => {
-      navMenu.classList.toggle("hidden");
-    });
-  }
-</script>
-
-<Layout styles="p-5 lg:p-20">
+<Layout styles="p-5 items-center lg:p-20">
   <div
     class="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
     style=`background-image: url(${yellowstoneBackground.src})`
   >
   </div>
-  <div class="h-full flex flex-row lg:w-8/12">
+  <div class="h-full w-full flex flex-col md:flex-row lg:w-8/12">
     <div
       class="hidden md:block w-3/12 bg-light rounded-sm border-double border-6 border-theme-dark"
     >
@@ -72,28 +62,25 @@ const menuItems: MenuItem[] = [
       <div
         class="flex flex-row items-center justify-center md:justify-start w-full"
       >
-        <img src={wolfWalk.src} alt="Wolf running gif" class="h-10/12" />
+        <img src={wolfWalk.src} alt="Wolf running gif" class="h-12 sm:h-18" />
         <h1
           class="font-title text-4xl sm:text-5xl drop-shadow-[2px_2px_3px_rgba(0,0,0,1)] text-theme-orange"
           style="line-height: unset;"
         >
           HYPERWOLFIE
         </h1>
-        <img src={wolfWalk.src} alt="Wolf running gif" class="h-8/12" />
+        <img src={wolfWalk.src} alt="Wolf running gif" class="h-12 sm:h-18" />
       </div>
-      <div class=" w-full">
-        <button
-          class="sm:hidden nav-button w-full bg-radial to-theme-blue from-white p-2 border-3 border-dotted"
-          ><div
-            class="flex font-bold flex-row items-center justify-between font-fredoka"
-          >
-            Navigation 🐾 <Icon name="lucide:chevron-down" />
-          </div></button
+      <div class="w-full sm:hidden">
+        <DropdownButton
+          label="Navigation 🐾"
+          id="menu"
         >
-        <Menu
-          menuItems={menuItems}
-  styles="nav-menu hidden md:hidden sm:flex sm:menu-horizontal sm:justify-around font-macondo text-xl bg-light w-full border-double border-theme-dark border-x-6 border-t-6"
-        />
+          <Menu
+            menuItems={menuItems}
+            styles="md:hidden sm:flex sm:menu-horizontal sm:justify-around font-macondo text-xl bg-light w-full border-double border-theme-dark border-x-6 border-t-6"
+          />
+        </DropdownButton>
       </div>
       <div class="flex flex-row">
         <main

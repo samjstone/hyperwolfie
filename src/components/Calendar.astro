@@ -3,19 +3,23 @@ import type { Post } from "../lib/posts";
 
 interface CalendarProps {
   feed: Post[];
+  id: string
 }
-const { feed } = Astro.props as CalendarProps;
+const { feed, id } = Astro.props as CalendarProps;
 ---
 
 <script type="module" src="https://unpkg.com/cally"></script>
 
-<script define:vars={{ feed }}>
+<script define:vars={{ feed, id }}>
   document.addEventListener("astro:page-load", () => {
     customElements.whenDefined("calendar-date").then(() => {
       const datesWithPosts = feed.map(
         (post) => new Date(post.data.date).toISOString().split("T")[0],
       );
-      const calendar = document.querySelector("calendar-date");
+      const root = document.getElementById(id);
+      if(!root) return;
+
+      const calendar = root.querySelector("calendar-date");
 
       if (calendar) {
         // Set dates that have posts on them
@@ -61,7 +65,7 @@ const { feed } = Astro.props as CalendarProps;
         });
 
         // Add click event listener to navigate to the post for that date
-        const postListDiv = document.querySelector(".postListForDate");
+        const postListDiv = root.querySelector(".postListForDate");
         const toKey = (d) => d.toLocaleDateString("en-CA");
 
         calendar.addEventListener("focusday", (event) => {
@@ -136,29 +140,30 @@ const { feed } = Astro.props as CalendarProps;
     outline: 2px solid var(--color-theme-orange); /* optional: keeps a hint it has a post */
   }
 </style>
+<div class="flex flex-col" id={id}>
+  <calendar-date locale="en-GB">
+    <svg
+      aria-label="Previous"
+      slot="previous"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+    >
+      <path d="M15.75 19.5 8.25 12l7.5-7.5"></path>
+    </svg>
+    <svg
+      aria-label="Next"
+      slot="next"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+    >
+      <path d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
+    </svg>
+    <calendar-month></calendar-month>
+  </calendar-date>
 
-<calendar-date locale="en-GB">
-  <svg
-    aria-label="Previous"
-    slot="previous"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
+  <div
+    class="postListForDate flex-col text-black drop-shadow-sm bg-theme-yellow mt-2 rounded-sm mb-1 hidden p-1"
   >
-    <path d="M15.75 19.5 8.25 12l7.5-7.5"></path>
-  </svg>
-  <svg
-    aria-label="Next"
-    slot="next"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-  >
-    <path d="m8.25 4.5 7.5 7.5-7.5 7.5"></path>
-  </svg>
-  <calendar-month></calendar-month>
-</calendar-date>
-
-<div
-  class="postListForDate flex-col text-black drop-shadow-sm bg-theme-yellow mt-2 rounded-sm mb-1 hidden p-1"
->
+  </div>
+  <div class="invisible">.</div>
 </div>
-<div class="invisible">.</div>

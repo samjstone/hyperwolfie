@@ -1,0 +1,45 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  label: string;
+  id: string;
+}
+const { label, id } = Astro.props;
+---
+
+<div class="w-full" data-dropdown>
+  <button
+    type="button"
+    class="w-full bg-radial to-theme-blue from-white p-2 border-3 border-dotted"
+    aria-expanded="false"
+    aria-controls={`dropdown-content-${id}`}
+    data-dropdown-button
+  >
+    <div
+      class="flex font-bold flex-row items-center justify-between font-fredoka"
+    >
+      {label}
+      <Icon name="lucide:chevron-down" />
+    </div>
+  </button>
+
+  <div id={`dropdown-content-${id}`} class="hidden" data-dropdown-content>
+    <slot />
+  </div>
+</div>
+
+<script>
+  document.addEventListener("click", (event) => {
+    const button = (event.target as Element).closest("[data-dropdown-button]");
+    if (!button) return;
+
+    const content = button
+      .closest("[data-dropdown]")
+      ?.querySelector("[data-dropdown-content]");
+    if (!content) return;
+
+    const isHidden = content.classList.toggle("hidden");
+    button.setAttribute("aria-expanded", String(!isHidden));
+  });
+</script>
