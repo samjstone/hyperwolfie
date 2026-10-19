@@ -72,16 +72,17 @@ const menuItems: MenuItem[] = [
         <img src={wolfWalk.src} alt="Wolf running gif" class="h-12 sm:h-18" />
       </div>
       <div class="w-full sm:hidden">
-        <DropdownButton
-          label="Navigation 🐾"
-          id="menu"
-        >
+        <DropdownButton label="Navigation 🐾" id="menu">
           <Menu
             menuItems={menuItems}
-            styles="md:hidden sm:flex sm:menu-horizontal sm:justify-around font-macondo text-xl bg-light w-full border-double border-theme-dark border-x-6 border-t-6"
+            styles="sm:flex sm:menu-horizontal sm:justify-around font-macondo text-xl bg-light w-full border-double border-theme-dark border-x-6 border-t-6"
           />
         </DropdownButton>
       </div>
+      <Menu
+        menuItems={menuItems}
+        styles="hidden md:hidden sm:flex sm:menu-horizontal sm:justify-around font-macondo text-xl bg-light w-full border-double border-theme-dark border-x-6 border-t-6"
+      />
       <div class="flex flex-row">
         <main
           class="flex flex-3 flex-col bg-light h-full rounded-r-sm border-6 md:border-0 border-double md:border-y-6 md:border-r-6 border-theme-dark p-3"
