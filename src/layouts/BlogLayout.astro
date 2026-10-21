@@ -21,7 +21,6 @@ interface BlogProps {
 
 const { postData, feed, page } = Astro.props as BlogProps;
 
-
 const nextFeedPost =
   feed.at(feed.findIndex((p) => p.id === postData?.id) + 1) || null;
 const nextPostUrl =
@@ -31,6 +30,7 @@ const prevFeedPostIndex = feed.findIndex((p) => p.id === postData?.id) - 1;
 const prevFeedPost = prevFeedPostIndex >= 0 ? feed.at(prevFeedPostIndex) : null;
 const prevPostUrl =
   page?.url.prev ?? (prevFeedPost ? `/${prevFeedPost?.id}` : null);
+
 ---
 
 <style>
@@ -40,17 +40,16 @@ const prevPostUrl =
     width: max-content;
     border-color: var(--color-theme-dark);
     border-width: 3px;
-    border-style:dotted;
+    border-style: dotted;
     border-radius: 5px;
   }
 
- .postContainer :global(h1) { 
-  font-weight: bolder;
-  font-size: x-large;
-  color: var(--color-theme-blue);
-  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
-  font-family: "Fredoka";
- }
+  .postContainer :global(h1) {
+    font-weight: bold;
+    font-size: x-large;
+    color: var(--color-theme-blue);
+    font-family: "Macondo";
+  }
 </style>
 
 <Layout styles="lg:overflow-y-clip items-center p-3 pt-16 lg:p-0">
@@ -113,25 +112,55 @@ const prevPostUrl =
               class="flex bg-white justify-between flex-col bg-fixed border-2 border-dotted border-black h-[calc(100vh-190px)] lg:h-full overflow-y-scroll p-3 md:p-5 [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:bg-theme-orange [&::-webkit-scrollbar-thumb]:border-sm"
               style={`background-image: url(${linedGreen.src})`}
             >
-            
               <div class="h-full">
-                {postData ? (
-
-                <a
-                  class="u-url"
-                  href={`https://hyperwolfie.com/${postData.id}`}
-                  hidden></a>
-                <div></div>
-                <div class="pb-2 text-right">
-                  <time
-                    class="dt-published text-theme-orange font-bold"
-                    datetime={postData.date.toISOString()}
-                  >
-                    {postData.dateFormatted}
-                  </time>
-                </div>
-                <div class="postContainer h-full flex flex-col gap-5" set:html={postData.html.toString()} />
-                ) : (<p>No posts yet....</p>)}
+                {
+                  postData ? (
+                    <div class="h-entry h-full">
+                      <a
+                        class="u-url"
+                        href={new URL(`/${postData.id}/`, Astro.site).href}
+                        hidden
+                      />
+                      <div />
+                      <div class="pb-2 text-right">
+                        <a
+                          href={`/${postData.id}`}
+                          class="text-theme-orange font-bold hover:underline"
+                        >
+                          <time
+                            datetime={postData.date.toISOString()}
+                            class="dt-published"
+                          >
+                            {postData.dateFormatted}
+                          </time>
+                        </a>
+                      </div>
+                      <a
+                        href={`/${postData.id}`}
+                        class="hover:underline p-name mb-3 font-extrabold text-3xl font-fredoka text-theme-green"
+                      >
+                        {postData.title}
+                      </a>
+                      <div
+                        class="e-content postContainer h-full flex flex-col gap-5"
+                        set:html={postData.html.toString()}
+                      />
+                      <a
+                        class="u-bridgy-fed"
+                        href="https://fed.brid.gy/"
+                        hidden="from-humans"
+                      />
+                      <a
+                        class="p-author h-card hidden"
+                        href="https://hyperwolfie.com/"
+                      >
+                        HyperWolfie
+                      </a>
+                    </div>
+                  ) : (
+                    <p>No posts yet....</p>
+                  )
+                }
               </div>
             </div>
             <div class="mt-2 flex font-bold justify-between text-theme-dark">
@@ -180,14 +209,19 @@ const prevPostUrl =
               class="p-3 text-white border-black bg-repeat border-3 h-2/8 overflow-y-scroll [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-theme-dark [&::-webkit-scrollbar-thumb]:bg-theme-blue [&::-webkit-scrollbar-thumb]:border-sm"
               style={`background-image: url(${dirt.src}); border-style: ridge`}
             >
-            <h3 class="font-bold text-theme-yellow">Interactions</h3>
-            {postData ? (
-
-              <PostWebmentions postId={postData.id} server:defer>
-                <span class="loading loading-dots loading-md" slot="fallback"
-                ></span>
-              </PostWebmentions>
-            ): (<p>No interactions yet...</p>)}
+              <h3 class="font-bold text-theme-yellow">Interactions</h3>
+              {
+                postData ? (
+                  <PostWebmentions postId={postData.id} server:defer>
+                    <span
+                      class="loading loading-dots loading-md"
+                      slot="fallback"
+                    />
+                  </PostWebmentions>
+                ) : (
+                  <p>No interactions yet...</p>
+                )
+              }
             </div>
           </div>
         </div>
