@@ -13,11 +13,6 @@ export const getStaticPaths = (async ({ paginate }) => {
 
 const { page, feed } = Astro.props;
 const firstPost = page.data[0];
-const webmentions = await Promise.all(
-    await getWebmentions(
-      `${Astro.site}${firstPost.id}`,
-    )
-);
 
 // Page size is 1, so its ok to use the first post
   const root = parse(firstPost.rendered?.html ?? "");
@@ -30,5 +25,6 @@ const webmentions = await Promise.all(
     title: firstPost.data.title,
     html: root.toString(),
   } as PostData;
+
 ---
-<BlogLayout post={post} feed={feed} webmentions={webmentions} page={page}/>
+<BlogLayout post={post} feed={feed} page={page}/>

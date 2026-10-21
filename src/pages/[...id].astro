@@ -14,21 +14,17 @@ export async function getStaticPaths() {
 }
 
 const { post, feed } = Astro.props;
-const webmentions = await Promise.all(
-    await getWebmentions(
-      `${Astro.site}${post.id}`,
-    )
-);
+const root = parse(post.rendered?.html ?? "");
+root.querySelectorAll("img").forEach((el) => el.classList.add("u-photo"));
+const postData = {
+  id: post.id,
+  date: post.data.date,
+  dateFormatted: formatDateTime(post.data.date),
+  photo: post.data.photo,
+  title: post.data.title,
+  html: root.toString(),
+} as PostData;
 
-  const root = parse(post.rendered?.html ?? "");
-  root.querySelectorAll("img").forEach((el) => el.classList.add("u-photo"));
-  const postData =  {
-    id: post.id,
-    date: post.data.date,
-    dateFormatted: formatDateTime(post.data.date),
-    photo: post.data.photo,
-    title: post.data.title,
-    html: root.toString(),
-  } as PostData;
 ---
-<BlogLayout post={postData} feed={feed} webmentions={webmentions} page={null}/>
+
+<BlogLayout post={postData} feed={feed} page={null} />

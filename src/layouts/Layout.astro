@@ -2,9 +2,8 @@
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
 
-const { styles, bgImage } = Astro.props as {
+const { styles } = Astro.props as {
   styles?: string;
-  bgImage?: string;
 };
 ---
 
@@ -43,7 +42,7 @@ const { styles, bgImage } = Astro.props as {
       defer></script>
     <title>HyperWolfie</title>
   </head>
-  <body class=`${styles}` style={`background-image: url(${bgImage})`}>
+  <body class=`${styles}`>
     <div class="h-card hidden">
       <a class="u-url p-name" rel="me" href={Astro.site}> HyperWolfie</a>
       <img

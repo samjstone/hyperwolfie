@@ -1,19 +1,26 @@
 ---
+import { getWebmentions } from "../server/getWebmentions";
 import type { Webmention } from "../types/webmentions";
 
 interface Props {
-  webmentions: Webmention[]
+  postId: string
 }
 
-const { webmentions } = Astro.props;
+const { postId } = Astro.props;
+const webmentions = await Promise.all(
+
+    await getWebmentions(
+      `${Astro.site}${postId}`,
+    )
+);
 ---
 
 <div>
-  {
+  {(webmentions.length > 0) ? (
     webmentions.map((webmention) => (
       <div >
         {webmention.author.name} {webmention.content?.text}
       </div>
     ))
-  }
+  ): (<p>No interactions yet...</p>)}
 </div>

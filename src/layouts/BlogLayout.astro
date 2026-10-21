@@ -3,7 +3,6 @@ import PostListDropdowns from "../components/PostListDropdowns.astro";
 import PostWebmentions from "../components/PostWebmentions.astro";
 import Layout from "./Layout.astro";
 import wolfYell from "../assets/images/wolf-yell.gif";
-import linedPaper from "../assets/backgrounds/lined-paper.jpg";
 import linedGreen from "../assets/backgrounds/lined-green.gif";
 import dirt from "../assets/backgrounds/dirt.jpg";
 import grassHills from "../assets/backgrounds/grass-hills.jpg";
@@ -19,11 +18,10 @@ import DropdownButton from "../components/DropdownButton.astro";
 interface BlogProps {
   post: PostData;
   feed: Post[];
-  webmentions: Webmention[];
   page: Page<Post> | null;
 }
 
-const { post, feed, webmentions, page } = Astro.props as BlogProps;
+const { post, feed, page } = Astro.props as BlogProps;
 
 const nextFeedPost =
   feed.at(feed.findIndex((p) => p.id === post.id) + 1) || null;
@@ -87,7 +85,7 @@ const prevPostUrl =
                   src={wolfHowlMini.src}
                   class="w-30 absolute top-0 right-0 z-1 drop-shadow-lg drop-shadow-theme-blue"
                 />
-                  <Calendar feed={feed} id="dropdown-calendar" />
+                <Calendar feed={feed} id="dropdown-calendar" />
               </div>
             </DropdownButton>
           </div>
@@ -156,17 +154,18 @@ const prevPostUrl =
             </div>
 
             <div
-            class="p-3 text-white border-black bg-repeat border-3 h-2/8 overflow-y-scroll [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-theme-dark [&::-webkit-scrollbar-thumb]:bg-theme-blue [&::-webkit-scrollbar-thumb]:border-sm"
-            style={`background-image: url(${dirt.src}); border-style: ridge`}
+              class="p-3 text-white border-black bg-repeat border-3 h-2/8 overflow-y-scroll [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-theme-dark [&::-webkit-scrollbar-thumb]:bg-theme-blue [&::-webkit-scrollbar-thumb]:border-sm"
+              style={`background-image: url(${dirt.src}); border-style: ridge`}
             >
-            {(webmentions?.length ?? 0) > 0 ? 
-            <PostWebmentions webmentions={webmentions} />
-            : <div>No interactions yet...</div>}
+            <h3 class="font-bold text-theme-yellow">Interactions</h3>
+              <PostWebmentions postId={post.id} server:defer>
+                <span class="loading loading-dots loading-md" slot="fallback"
+                ></span>
+              </PostWebmentions>
             </div>
-
+          </div>
         </div>
       </div>
     </div>
-  </div>
   </div>
 </Layout>
