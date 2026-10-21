@@ -1,5 +1,4 @@
 ---
-import PostListDropdowns from "../components/PostListDropdowns.astro";
 import PostWebmentions from "../components/PostWebmentions.astro";
 import Layout from "./Layout.astro";
 import wolfYell from "../assets/images/wolf-yell.gif";
@@ -10,25 +9,25 @@ import mountainForest from "../assets/backgrounds/mountain-forest.jpg";
 import wolfHowlMini from "../assets/images/wolf-howl-mini.gif";
 import leaves from "../assets/images/leaves.png";
 import type { Post } from "../lib/posts";
-import type { Webmention } from "../types/webmentions";
 import type { Page } from "astro";
 import Calendar from "../components/Calendar.astro";
 import DropdownButton from "../components/DropdownButton.astro";
 
 interface BlogProps {
-  post: PostData;
+  postData?: PostData;
   feed: Post[];
   page: Page<Post> | null;
 }
 
-const { post, feed, page } = Astro.props as BlogProps;
+const { postData, feed, page } = Astro.props as BlogProps;
+
 
 const nextFeedPost =
-  feed.at(feed.findIndex((p) => p.id === post.id) + 1) || null;
+  feed.at(feed.findIndex((p) => p.id === postData?.id) + 1) || null;
 const nextPostUrl =
   page?.url.next ?? (nextFeedPost ? `/${nextFeedPost?.id}` : null);
 
-const prevFeedPostIndex = feed.findIndex((p) => p.id === post.id) - 1;
+const prevFeedPostIndex = feed.findIndex((p) => p.id === postData?.id) - 1;
 const prevFeedPost = prevFeedPostIndex >= 0 ? feed.at(prevFeedPostIndex) : null;
 const prevPostUrl =
   page?.url.prev ?? (prevFeedPost ? `/${prevFeedPost?.id}` : null);
@@ -94,21 +93,25 @@ const prevPostUrl =
               class="flex bg-white justify-between flex-col bg-fixed border-2 border-dotted border-black h-[calc(100vh-190px)] lg:h-full overflow-y-scroll p-3 md:p-5 [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:bg-theme-orange [&::-webkit-scrollbar-thumb]:border-sm"
               style={`background-image: url(${linedGreen.src})`}
             >
+            
               <div>
+                {postData ? (
+
                 <a
                   class="u-url"
-                  href={`https://hyperwolfie.com/${post.id}`}
+                  href={`https://hyperwolfie.com/${postData.id}`}
                   hidden></a>
                 <div></div>
                 <div class="pb-2 text-right">
                   <time
                     class="dt-published text-theme-orange font-bold"
-                    datetime={post.date.toISOString()}
+                    datetime={postData.date.toISOString()}
                   >
-                    {post.dateFormatted}
+                    {postData.dateFormatted}
                   </time>
                 </div>
-                <div set:html={post.html.toString()} />
+                <div set:html={postData.html.toString()} />
+                ) : (<p>No posts yet....</p>)}
               </div>
             </div>
             <div class="mt-2 flex font-bold justify-between text-theme-dark">
@@ -158,10 +161,13 @@ const prevPostUrl =
               style={`background-image: url(${dirt.src}); border-style: ridge`}
             >
             <h3 class="font-bold text-theme-yellow">Interactions</h3>
-              <PostWebmentions postId={post.id} server:defer>
+            {postData ? (
+
+              <PostWebmentions postId={postData.id} server:defer>
                 <span class="loading loading-dots loading-md" slot="fallback"
                 ></span>
               </PostWebmentions>
+            ): (<p>No interactions yet...</p>)}
             </div>
           </div>
         </div>

@@ -91,28 +91,28 @@
   transform: translateX(-57%) rotate(45deg);
 }
 
-.box23{
-background:#ccb3a1; /* 背景色 */
-box-shadow:3px 3px 5px #666;
-box-sizing:border-box;
-margin:45px auto 20px;
-padding:30px 10px 10px;
-position:relative;
-width:80%
+.box23 {
+  background: #ccb3a1; /* 背景色 */
+  box-shadow: 3px 3px 5px #666;
+  box-sizing: border-box;
+  margin: 45px auto 20px;
+  padding: 30px 10px 10px;
+  position: relative;
+  width: 80%;
 }
-.masking-tape{
-background:url("/masking01.png") no-repeat center;
-height:50px;
-position:absolute;
-top:-25px;
-width:100%
+.masking-tape {
+  background: url("/masking01.png") no-repeat center;
+  height: 50px;
+  position: absolute;
+  top: -25px;
+  width: 100%;
 }
 
 .paperclip {
-background:url("/paperclip.png") no-repeat;
-height:62px;
-position:absolute;
-right:10px;
-top:-13px;
-width:27px
+  background: url("/paperclip.png") no-repeat;
+  height: 62px;
+  position: absolute;
+  right: 10px;
+  top: -13px;
+  width: 27px;
 }

@@ -1,10 +1,11 @@
 ---
-import { getFeed } from "../../lib/posts";
+import { getFeed, type Post } from "../../lib/posts";
 import type { GetStaticPaths } from "astro";
 import { getWebmentions } from "../../server/getWebmentions";
 import { parse } from "node-html-parser";
 import { formatDateTime } from "../../utils/formatters";
 import BlogLayout from "../../layouts/BlogLayout.astro";
+import { undefined } from "astro:schema";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const feed = await getFeed();
@@ -12,12 +13,18 @@ export const getStaticPaths = (async ({ paginate }) => {
 }) satisfies GetStaticPaths;
 
 const { page, feed } = Astro.props;
+
+
+let postData: PostData | null = null;
+
+if(feed.length > 0) {
+
 const firstPost = page.data[0];
 
 // Page size is 1, so its ok to use the first post
   const root = parse(firstPost.rendered?.html ?? "");
   root.querySelectorAll("img").forEach((el) => el.classList.add("u-photo"));
-  const post =  {
+  postData =  {
     id: firstPost.id,
     date: firstPost.data.date,
     dateFormatted: formatDateTime(firstPost.data.date),
@@ -25,6 +32,7 @@ const firstPost = page.data[0];
     title: firstPost.data.title,
     html: root.toString(),
   } as PostData;
+}
 
 ---
-<BlogLayout post={post} feed={feed} page={page}/>
+<BlogLayout postData={postData} feed={feed} page={page}/>

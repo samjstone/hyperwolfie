@@ -3,10 +3,7 @@ import { getFeed } from "../lib/posts";
 
 // Escape post bodies for embedding in the feed's HTML content.
 const escapeHtml = (s) =>
-  s
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
+  s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 
 export async function GET(context) {
   const posts = await getFeed();

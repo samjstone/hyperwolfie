@@ -4,7 +4,7 @@ export async function getWebmentions(pageUrl: string): Promise<Webmention[]> {
   try {
     console.log("Fetching webmentions for:", pageUrl);
     const response = await fetch(
-      `https://webmention.io/api/mentions.jf2?target=${pageUrl}/`
+      `https://webmention.io/api/mentions.jf2?target=${pageUrl}/`,
     );
     if (!response.ok) {
       throw new Error(`Response status: ${response.status}`);
@@ -15,7 +15,7 @@ export async function getWebmentions(pageUrl: string): Promise<Webmention[]> {
   } catch (error) {
     console.error(
       `Failed to load webmentions for ${pageUrl}:`,
-      error instanceof Error ? error.message : error
+      error instanceof Error ? error.message : error,
     );
     return [];
   }
