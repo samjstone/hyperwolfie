@@ -33,6 +33,26 @@ const prevPostUrl =
   page?.url.prev ?? (prevFeedPost ? `/${prevFeedPost?.id}` : null);
 ---
 
+<style>
+  .postContainer :global(img) {
+    align-self: center;
+    height: 90%;
+    width: max-content;
+    border-color: var(--color-theme-dark);
+    border-width: 3px;
+    border-style:dotted;
+    border-radius: 5px;
+  }
+
+ .postContainer :global(h1) { 
+  font-weight: bolder;
+  font-size: x-large;
+  color: var(--color-theme-blue);
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+  font-family: "Fredoka";
+ }
+</style>
+
 <Layout styles="lg:overflow-y-clip items-center p-3 pt-16 lg:p-0">
   <div
     class="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
@@ -94,7 +114,7 @@ const prevPostUrl =
               style={`background-image: url(${linedGreen.src})`}
             >
             
-              <div>
+              <div class="h-full">
                 {postData ? (
 
                 <a
@@ -110,7 +130,7 @@ const prevPostUrl =
                     {postData.dateFormatted}
                   </time>
                 </div>
-                <div set:html={postData.html.toString()} />
+                <div class="postContainer h-full flex flex-col gap-5" set:html={postData.html.toString()} />
                 ) : (<p>No posts yet....</p>)}
               </div>
             </div>
