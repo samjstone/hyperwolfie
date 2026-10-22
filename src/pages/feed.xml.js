@@ -3,7 +3,10 @@ import { getFeed } from "../lib/posts";
 
 // Strip tags for the plain-text description.
 const stripHtml = (s) =>
-  s.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+  s
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 
 export async function GET(context) {
   const posts = await getFeed();
@@ -21,7 +24,9 @@ export async function GET(context) {
         pubDate: post.data.date,
         content:
           `<div>${body}` +
-          (post.data.photo ?? []).map((p) => `<img src="${p}" alt="" />`).join("") +
+          (post.data.photo ?? [])
+            .map((p) => `<img src="${p}" alt="" />`)
+            .join("") +
           `<a href="https://fed.brid.gy/"></a></div>`,
       };
     }),

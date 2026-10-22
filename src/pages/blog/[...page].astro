@@ -31,8 +31,9 @@ const firstPost = page.data[0];
     photo: firstPost.data.photo,
     title: firstPost.data.title,
     html: root.toString(),
+    tags: firstPost.data.tags,
   } as PostData;
 }
 
 ---
-<BlogLayout postData={postData} feed={feed} page={page}/>
+<BlogLayout postData={postData} feed={feed} page={page} showInteractions={false}/>

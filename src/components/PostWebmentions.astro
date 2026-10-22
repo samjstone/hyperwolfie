@@ -1,6 +1,13 @@
 ---
 import { getWebmentions } from "../server/getWebmentions";
 import type { Webmention } from "../types/webmentions";
+import {
+  AtSign,
+  Bookmark,
+  Heart,
+  MessageCircle,
+  Repeat,
+} from "@lucide/astro/icons/index";
 
 interface Props {
   postId: string;
@@ -10,18 +17,114 @@ const { postId } = Astro.props;
 const webmentions = await Promise.all(
   await getWebmentions(`${Astro.site}${postId}`),
 );
+
+const typedWebmentions = webmentions.reduce<
+  Partial<Record<Webmention["wm-property"], Webmention[]>>
+>((acc, wm) => {
+  const currentType = wm["wm-property"];
+
+  // Initialize the array for this type if it doesn't exist yet
+  if (!acc[currentType]) {
+    acc[currentType] = [];
+  }
+  acc[currentType].push(wm);
+  return acc;
+}, {});
+
+const byNewest = (a: Webmention, b: Webmention) => {
+  return (
+    new Date(b.published || "").getTime() -
+    new Date(a.published || "").getTime()
+  );
+};
+const responses = [
+  ...(typedWebmentions["in-reply-to"] ?? []),
+  ...(typedWebmentions["mention-of"] ?? []),
+].sort(byNewest);
+
+const reactions = [
+  ...(typedWebmentions["bookmark-of"] ?? []),
+  ...(typedWebmentions["like-of"] ?? []),
+  ...(typedWebmentions["repost-of"] ?? []),
+  ...(typedWebmentions["rsvp"] ?? []),
+].sort(byNewest);
+
+type WmProperty = Webmention["wm-property"];
+
+const typeIcons: Partial<
+  Record<WmProperty, { icon: typeof Heart; class: string }>
+> = {
+  "in-reply-to": { icon: MessageCircle, class: "text-theme-blue" },
+  "mention-of": { icon: AtSign, class: "text-theme-green" },
+  "bookmark-of": { icon: Bookmark, class: "text-theme-orange" },
+  "like-of": { icon: Heart, class: "text-red-500 fill-red-500" },
+  "repost-of": { icon: Repeat, class: "text-theme-green" },
+};
 ---
 
 <div>
-  {
-    webmentions.length > 0 ? (
-      webmentions.map((webmention) => (
-        <div>
-          {webmention.author.name} {webmention.content?.text}
-        </div>
-      ))
-    ) : (
-      <p>No interactions yet...</p>
-    )
-  }
+  <div class="w-full">
+    {responses.length > 0 ?
+    (<h2 class="font-bold text-theme-blue text-xl">Responses</h2>) : (<></>)
+    }
+    
+
+            {
+      responses.map((response) => {
+        const entry = typeIcons[response["wm-property"]];
+        return (
+                    <div class="flex gap-1 items-center w-full">
+         <div class="relative w-fit shrink-0">
+            <img src={response.author.photo} class="w-10 h-10 rounded-full" />
+            {entry && (
+              <entry.icon
+                class:list={[
+                  "absolute -bottom-1 -right-1 w-4 h-4",
+                  entry.class,
+                ]}
+              />
+            )}
+          </div>
+          <a href={response.url}>
+                <p class="text-theme-green underline">This is my name</p>
+                </a>
+                    </div>
+                    <div class="min-w-0 flex-1">
+                <p class="truncate">{response.content?.text}</p>
+          </div>
+        );
+      })
+    }
+    </div>
+  </div>
+
+  <div>
+    {reactions.length > 0 ? (
+    <h2 class="font-bold text-theme-blue text-xl">Reactions</h2>
+
+    ) : (<></>)}
+    <div class="flex gap-3 mt-1">
+    {
+      reactions.map((response) => {
+        const entry = typeIcons[response["wm-property"]];
+        return (
+          <a href={response.url}>
+            <div class="relative w-fit">
+              <img src={response.author.photo} class="w-10 h-10 rounded-full" />
+              {entry && (
+                <entry.icon
+                  class:list={[
+                    "absolute -bottom-1 -right-1 w-4 h-4",
+                    entry.class,
+                  ]}
+                />
+              )}
+            </div>
+          </a>
+        );
+      })
+    }
+    </div>
+    
+  </div>
 </div>

@@ -22,9 +22,10 @@ const postData = {
   dateFormatted: formatDateTime(post.data.date),
   photo: post.data.photo,
   title: post.data.title,
+  tags: post.data.tags,
   html: root.toString(),
 } as PostData;
 
 ---
 
-<BlogLayout postData={postData} feed={feed} page={null} />
+<BlogLayout postData={postData} feed={feed} page={null} showInteractions={true} />

@@ -5,4 +5,5 @@ interface PostData {
   photo: string[];
   title: string | undefined;
   html: string;
+  tags: string[];
 }

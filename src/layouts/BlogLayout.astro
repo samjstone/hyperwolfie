@@ -12,14 +12,17 @@ import type { Post } from "../lib/posts";
 import type { Page } from "astro";
 import Calendar from "../components/Calendar.astro";
 import DropdownButton from "../components/DropdownButton.astro";
+import Comments from "../components/Comments.astro";
+import CommentCount from "../components/CommentCount.astro";
 
 interface BlogProps {
   postData?: PostData;
   feed: Post[];
   page: Page<Post> | null;
+  showInteractions: boolean;
 }
 
-const { postData, feed, page } = Astro.props as BlogProps;
+const { postData, feed, page, showInteractions } = Astro.props as BlogProps;
 
 const nextFeedPost =
   feed.at(feed.findIndex((p) => p.id === postData?.id) + 1) || null;
@@ -30,7 +33,6 @@ const prevFeedPostIndex = feed.findIndex((p) => p.id === postData?.id) - 1;
 const prevFeedPost = prevFeedPostIndex >= 0 ? feed.at(prevFeedPostIndex) : null;
 const prevPostUrl =
   page?.url.prev ?? (prevFeedPost ? `/${prevFeedPost?.id}` : null);
-
 ---
 
 <style>
@@ -52,23 +54,21 @@ const prevPostUrl =
   }
 </style>
 
-<Layout styles="lg:overflow-y-clip items-center p-3 pt-16 lg:p-0">
+<Layout styles=" items-center p-3 pt-16 lg:p-0">
   <div
     class="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
     style=`background-image: url(${mountainForest.src})`
   >
+
   </div>
-  <div class="lg:h-screen w-full flex justify-center items-center mt-3">
+  <div
+    class="flex-col gap-5 lg:h-full w-full flex justify-center items-center lg:mt-25"
+  >
     <div
-      class="relative isolate w-full lg:h-[80%] lg:w-[80%] lg:mx-10 m-4 lg:m-0 flex flex-col justify-center items-center"
+      class="relative w-full lg:w-[80%] lg:m-0 flex flex-col justify-center items-center"
     >
-      <img
-        class="hidden md:block absolute -bottom-14 md:-left-18 lg:-left-32 h-40 lg:h-50 -z-1"
-        src={wolfYell.src}
-        alt="Wolf yelling gif"
-      />
       <div
-        class="text-bubble w-full h-full bg-light p-5 sm:p-8 md:p-12 rounded-sm border-solid border-2 border-black"
+        class="w-full lg:h-[80vh] bg-light p-5 sm:p-8 md:p-12 rounded-sm border-solid border-2 border-black"
         style={`
           border-image-source: url(${leaves.src});
           border-image-slice: 591 658 27 308;
@@ -122,7 +122,7 @@ const prevPostUrl =
                         hidden
                       />
                       <div />
-                      <div class="pb-2 text-right">
+                      <div class="pb-2 flex gap-2 justify-end">
                         <a
                           href={`/${postData.id}`}
                           class="text-theme-orange font-bold hover:underline"
@@ -134,6 +134,10 @@ const prevPostUrl =
                             {postData.dateFormatted}
                           </time>
                         </a>
+                        <a href={`/${postData.id}#comments`} class="underline">
+                          <CommentCount postId={postData.id} /> 
+                        </a>
+
                       </div>
                       <a
                         href={`/${postData.id}`}
@@ -156,11 +160,13 @@ const prevPostUrl =
                       >
                         HyperWolfie
                       </a>
+
                     </div>
                   ) : (
                     <p>No posts yet....</p>
                   )
                 }
+
               </div>
             </div>
             <div class="mt-2 flex font-bold justify-between text-theme-dark">
@@ -209,23 +215,34 @@ const prevPostUrl =
               class="p-3 text-white border-black bg-repeat border-3 h-2/8 overflow-y-scroll [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-theme-dark [&::-webkit-scrollbar-thumb]:bg-theme-blue [&::-webkit-scrollbar-thumb]:border-sm"
               style={`background-image: url(${dirt.src}); border-style: ridge`}
             >
-              <h3 class="font-bold text-theme-yellow">Interactions</h3>
-              {
-                postData ? (
-                  <PostWebmentions postId={postData.id} server:defer>
-                    <span
-                      class="loading loading-dots loading-md"
-                      slot="fallback"
-                    />
-                  </PostWebmentions>
-                ) : (
-                  <p>No interactions yet...</p>
-                )
-              }
+              <h3 class="font-bold text-theme-yellow">Tags</h3>
+              {postData?.tags.map((tag) => <div class="w-fit">#{tag}</div>)}
             </div>
           </div>
         </div>
       </div>
     </div>
+    {showInteractions === true && postData ? (
+
+    <div class="relative rounded-sm bg-light w-full lg:w-[80%] self-center py-5 px-12" id="comments">
+      <div class="mb-5">
+
+      <PostWebmentions postId={postData.id} server:defer>
+        <span
+          class="loading loading-dots loading-md"
+          slot="fallback"
+        />
+      </PostWebmentions>
+      </div>
+
+      <h2 class="font-bold text-theme-blue text-xl">Comments</h2>
+      <Comments server:defer />
+      <img
+        class="hidden md:block absolute -bottom-14 md:-left-18 lg:-left-32 h-40 lg:h-50 -z-1"
+        src={wolfYell.src}
+        alt="Wolf yelling gif"
+      />
+    </div>
+    ) : <></>}
   </div>
 </Layout>
