@@ -7,12 +7,11 @@ const { postId } = Astro.props as CommentCountProps;
 const isLocalDev = import.meta.env.DEV;
 ---
 
-<script defer src="https://comments.hyperwolfie.com/comentario.js"></script>
 <comentario-count
     domain-id={isLocalDev ? "e3e3afd7-409b-42cb-83b3-2f174c1562aa" : "04982b80-07be-4ea4-a151-d4c1a501d132"}
-    path={`/${postId}`}
+    path={`/${postId}/`}
     placeholder="..."
     error-text="ERR"
-    zero-text=""
+    zero-text="[0 Comments]"
     prefix="["
     suffix=" Comment(s)]"></comentario-count>

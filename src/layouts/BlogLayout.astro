@@ -27,12 +27,12 @@ const { postData, feed, page, showInteractions } = Astro.props as BlogProps;
 const nextFeedPost =
   feed.at(feed.findIndex((p) => p.id === postData?.id) + 1) || null;
 const nextPostUrl =
-  page?.url.next ?? (nextFeedPost ? `/${nextFeedPost?.id}` : null);
+  page?.url.next ?? (nextFeedPost ? `/${nextFeedPost?.id}/` : null);
 
 const prevFeedPostIndex = feed.findIndex((p) => p.id === postData?.id) - 1;
 const prevFeedPost = prevFeedPostIndex >= 0 ? feed.at(prevFeedPostIndex) : null;
 const prevPostUrl =
-  page?.url.prev ?? (prevFeedPost ? `/${prevFeedPost?.id}` : null);
+  page?.url.prev ?? (prevFeedPost ? `/${prevFeedPost?.id}/` : null);
 ---
 
 <style>
@@ -76,7 +76,7 @@ const prevPostUrl =
           border-image-repeat: repeat round;
           `}
       >
-        <a href="/blog" class="hover:pointer">
+        <a href="/blog/" class="hover:pointer">
           <h1
             class="font-title text-7xl z-10 text-theme-orange drop-shadow-md drop-shadow-black absolute -top-12 left-3"
           >
@@ -124,7 +124,7 @@ const prevPostUrl =
                       <div />
                       <div class="pb-2 flex gap-2 justify-end">
                         <a
-                          href={`/${postData.id}`}
+                          href={`/${postData.id}/`}
                           class="text-theme-orange font-bold hover:underline"
                         >
                           <time
@@ -134,13 +134,13 @@ const prevPostUrl =
                             {postData.dateFormatted}
                           </time>
                         </a>
-                        <a href={`/${postData.id}#comments`} class="underline">
+                        <a href={`/${postData.id}/#comments`} class="underline">
                           <CommentCount postId={postData.id} /> 
                         </a>
 
                       </div>
                       <a
-                        href={`/${postData.id}`}
+                        href={`/${postData.id}/`}
                         class="hover:underline p-name mb-3 font-extrabold text-3xl font-fredoka text-theme-green"
                       >
                         {postData.title}
