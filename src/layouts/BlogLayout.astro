@@ -135,7 +135,12 @@ const prevPostUrl =
                           </time>
                         </a>
                         <a href={`/${postData.id}/#comments`} class="underline">
-                          <CommentCount postId={postData.id} /> 
+                          <CommentCount postId={postData.id} server:defer>
+                            <span
+                              class="loading loading-dots loading-md"
+                              slot="fallback"
+                            />
+                            </CommentCount> 
                         </a>
 
                       </div>
