@@ -133,7 +133,7 @@ const faveAnimeManga: FavoriteItem[] = [
         class="fixed inset-0 -z-10 bg-center bg-repeat"
         style=`background-image: url(${greenKnit.src})`
     >
-        <div class="w-full h-full relative">
+        <div class="hidden md:block w-full h-full relative">
             <img
                 src={timberWolf.src}
                 class="absolute -left-16 bottom-0 h-150 drop-shadow-md drop-shadow-theme-dark"
@@ -141,19 +141,23 @@ const faveAnimeManga: FavoriteItem[] = [
         </div>
     </div>
     <div
-        class="absolute top-8 left-60 text-white z-10 font-bold text-md drop-shadow-sm drop-shadow-black"
+        class="absolute top-5 lg:top-8 left-5 lg:left-60 text-white z-10 font-bold text-md drop-shadow-sm drop-shadow-black"
     >
         <a href="/" class="hover:underline">
             {`<- Home`}
         </a>
     </div>
     <div class="flex-col h-screen w-full flex justify-center items-center">
-        <div class="w-[70%] h-130 items-center flex flex-col relative">
+        <div
+            class="w-[90%] md:w-[70%] h-130 items-center flex flex-col relative"
+        >
             <img
                 src={paperStack.src}
-                class="absolute -top-10 right-0 -z-1 w-full drop-shadow-xl drop-shadow-black"
+                class="absolute top-2 lg:-top-10 right-0 -z-1 w-full drop-shadow-xl drop-shadow-black"
             />
-            <div class="bg-light h-15 w-[30%] rounded-t-md self-start relative">
+            <div
+                class="bg-light h-15 w-[50%] md:w-[30%] rounded-t-md self-start relative"
+            >
                 <div
                     class="font-title text-4xl text-theme-orange h-full p-2 rounded-md"
                 >
@@ -167,15 +171,17 @@ const faveAnimeManga: FavoriteItem[] = [
 
                 <img
                     src={paperClip.src}
-                    class="h-20 absolute right-5 -top-0.5"
+                    class="h-20 absolute right-2 md:right-5 -top-0.5"
                 />
             </div>
             <div
-                class="overflow-y-scroll bg-light p-10 w-full h-full rounded-md flex flex-col rounded-tl-none shadow-xl"
+                class="overflow-y-scroll bg-light p-5 md:p-10 w-full h-full rounded-md flex flex-col rounded-tl-none shadow-xl"
             >
-                <div class="flex w-full gap-5 h-60">
+                <div
+                    class="flex md:flex-row flex-col gap-5 md:h-60 h-auto items-center md:items-top"
+                >
                     <div
-                        class="relative h-full border-dashed border-theme-orange border-3 shadow"
+                        class="relative w-fit h-60 border-dashed border-theme-orange border-3 shadow"
                     >
                         <img class="h-full rounded-sm" src={portrait.src} />
                         <img
@@ -184,7 +190,7 @@ const faveAnimeManga: FavoriteItem[] = [
                         />
                     </div>
                     <div
-                        class="flex-1 h-60 w-8/12 bg-white relative shadow rounded-sm p-5"
+                        class="md:flex-1 h-60 w-full md:w-8/12 bg-white relative shadow rounded-sm p-5"
                         style=`background-image: url(${cotton.src})`
                     >
                         <img
@@ -249,18 +255,20 @@ const faveAnimeManga: FavoriteItem[] = [
                     <div class="flex gap-3 items-center">
                         <img
                             src={heartAnimated.src}
-                            class="h-15 drop-shadow-md drop-shadow-theme-dark"
+                            class="h-10 md:h-15 drop-shadow-md drop-shadow-theme-dark"
                         />
                         <img
                             src={tangoText.src}
-                            class="w-50 drop-shadow-md drop-shadow-theme-dark"
+                            class="w-30 md:w-50 drop-shadow-md drop-shadow-theme-dark"
                         />
                         <img
                             src={heartAnimated.src}
-                            class="h-15 drop-shadow-md drop-shadow-theme-dark"
+                            class="h-10 md:h-15 drop-shadow-md drop-shadow-theme-dark"
                         />
                     </div>
-                    <div class="flex w-full justify-center items-center gap-5">
+                    <div
+                        class="flex lg:flex-row flex-col w-full justify-center items-center gap-5"
+                    >
                         <div class="w-fit relative h-50 self-center">
                             <img
                                 src={heart.src}
@@ -273,23 +281,25 @@ const faveAnimeManga: FavoriteItem[] = [
                                 ever....
                             </p>
                         </div>
-                        <div class="chat chat-end">
-                            <div
-                                class="chat-bubble bg-white text-black text-xl drop-shadow-md drop-shadow-theme-dark"
-                            >
-                                i am so so cute and sneaky :3
+                        <div class="flex">
+                            <div class="mt-5 md:mt-20 chat chat-end">
+                                <div
+                                    class="chat-bubble bg-white text-black md:text-xl drop-shadow-md drop-shadow-theme-dark"
+                                >
+                                    i am so so cute and sneaky :3
+                                </div>
                             </div>
-                        </div>
 
-                        <div class="relative">
-                            <img
-                                src={tango.src}
-                                class="w-60 drop-shadow-md drop-shadow-theme-dark"
-                            />
-                            <img
-                                class="absolute top-3 left-23 h-10 drop-shadow-2xl drop-shadow-black"
-                                src={pin.src}
-                            />
+                            <div class="relative">
+                                <img
+                                    src={tango.src}
+                                    class="w-60 drop-shadow-md drop-shadow-theme-dark"
+                                />
+                                <img
+                                    class="absolute top-1 md:top-3 left-8 md:left-23 h-10 drop-shadow-2xl drop-shadow-black"
+                                    src={pin.src}
+                                />
+                        </div>
                         </div>
                     </div>
                 </div>
