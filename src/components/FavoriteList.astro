@@ -1,0 +1,34 @@
+---
+import water from "../assets/backgrounds/water-animated-bg.gif";
+
+export interface FavoriteItem {
+    imgSrc: string;
+    href: string;
+}
+
+interface FavoriteListProps {
+    title: string;
+    items: FavoriteItem[];
+}
+const { title, items } = Astro.props as FavoriteListProps;
+---
+
+<div class="shrink-0 w-full">
+    <h2 class="font-fredoka text-2xl text-theme-green font-bold">{title}</h2>
+    <div
+        class="flex overflow-x-auto scrollbar-none overflow-y-clip w-full h-30 rounded-md border-dashed border-theme-dark border-3 items-center p-2 gap-3 shadow"
+        style=`background-image: url(${water.src})`
+    >
+        {
+            items.map((item) => (
+                <a href={item.href} class="h-full shrink-0 shadow relative">
+                    <div class="absolute hover:bg-theme-yellow hover:bg-blend-screen h-full w-full opacity-60"></div>
+                    <img
+                        src={item.imgSrc}
+                        class="h-full w-auto max-w-none block rounded-sm"
+                    />
+                </a>
+            ))
+        }
+    </div>
+</div>
