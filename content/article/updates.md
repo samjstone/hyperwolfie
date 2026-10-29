@@ -11,7 +11,7 @@ client_id: 'https://quill.p3k.app/id'
 ---
 <p>Hiiiii :D</p>
 <p>I just finished up the <a href="https://hyperwolfie.com/about/" rel="noopener">about</a> page on my site! I'm pretty happy with how it turned out, it was a lot of fun designing the different aesthetics. I think I'm getting better at doing more complicated css tricks which is cool! I also like being able to launch new features that are already mobile responsive, which is not the case when I first started the site.</p>
-<p>Besides working on my website, I've mainly been packing for Poland T<strong>T it's slow going but we're making good progress. It's crazy that Jay and I are leaving so soon to a new country!! It's less than a couple weeks now O</strong>O eek!</p>
+<p>Besides working on my website, I've mainly been packing for Poland T_T it's slow going but we're making good progress. It's crazy that Jay and I are leaving so soon to a new country!! It's less than a couple weeks now O_O eek!</p>
 <p>Here's some photos from the past week that I wanna share :)</p>
 <p><img src="https://hyperwolfie.com/content/uploads/1793302165_PXL_20261023_175746018-1-.jpg" alt=""> </p>
 <p>Beautiful kebab pizza with fries on top...sadly it was cold as fuck when we got it so it was kinda nasty as hell. But it was fun having fredagsmys with my friends and watching Help (Beatles movie.. o_O) and drawing with them.</p>
