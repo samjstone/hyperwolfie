@@ -1,6 +1,299 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import greenKnit from "../../assets/backgrounds/green-knit-bg.jpeg";
+import paperClip from "../../assets/images/paper-clip.png";
+import blueTape from "../../assets/images/blue-tape.png";
+import pin from "../../assets/images/pin.png";
+import timberWolf from "../../assets/images/timber-wolf.png";
+import portrait from "../../assets/images/portrait.jpg";
+import paperStack from "../../assets/images/paper-stack.png";
+import tango from "../../assets/images/tango.png";
+import heart from "../../assets/images/heart.png";
+import corkboard from "../../assets/images/corkboard.png";
+import heartAnimated from "../../assets/images/heart-animated.gif";
+import tangoText from "../../assets/images/tango-text.gif";
+import bwCover from "../../assets/images/favoriteMedias/bw-cover.jpg";
+import daoCover from "../../assets/images/favoriteMedias/dao-cover.png";
+import ff7Cover from "../../assets/images/favoriteMedias/ff7-cover.jpg";
+import ffxCover from "../../assets/images/favoriteMedias/ffx-cover.jpg";
+import mgs1Cover from "../../assets/images/favoriteMedias/mgs1-cover.png";
+import p5rCover from "../../assets/images/favoriteMedias/p5r-cover.jpg";
+import pentimentCover from "../../assets/images/favoriteMedias/pentiment-cover.jpg";
+import tpCover from "../../assets/images/favoriteMedias/tp-cover.jpeg";
+import transistorCover from "../../assets/images/favoriteMedias/transistor-cover.jpg";
+import twbbCover from "../../assets/images/favoriteMedias/twbb-cover.jpeg";
+import iwtvCover from "../../assets/images/favoriteMedias/iwtv-cover.jpg";
+import querelleCover from "../../assets/images/favoriteMedias/querelle-cover.jpg";
+import stCover from "../../assets/images/favoriteMedias/st-tos-cover.jpg";
+import phantomThreadCover from "../../assets/images/favoriteMedias/phantom-thread-cover.png";
+import narutoCover from "../../assets/images/favoriteMedias/naruto-cover.jpg";
+import bfCover from "../../assets/images/favoriteMedias/bf-cover.jpeg";
+import dvmCover from "../../assets/images/favoriteMedias/dvm-cover.jpg";
+import promareCover from "../../assets/images/favoriteMedias/promare-cover.jpg";
+import utenaCover from "../../assets/images/favoriteMedias/utena-cover.png";
+import yugiohCover from "../../assets/images/favoriteMedias/yugioh-cover.jpg";
 
+import cotton from "../../assets/backgrounds/cotton-bg.gif";
+import FavoriteList, {
+    type FavoriteItem,
+} from "../../components/FavoriteList.astro";
+
+const faveGameList: FavoriteItem[] = [
+    {
+        imgSrc: ff7Cover.src,
+        href: "https://en.wikipedia.org/wiki/Final_Fantasy_VII",
+    },
+    {
+        imgSrc: bwCover.src,
+        href: "https://en.wikipedia.org/wiki/Pok%C3%A9mon_Black_and_White",
+    },
+    {
+        imgSrc: daoCover.src,
+        href: "https://en.wikipedia.org/wiki/Dragon_Age:_Origins",
+    },
+    {
+        imgSrc: ffxCover.src,
+        href: "https://en.wikipedia.org/wiki/Final_Fantasy_X",
+    },
+    {
+        imgSrc: mgs1Cover.src,
+        href: "https://en.wikipedia.org/wiki/Metal_Gear_Solid_(video_game)",
+    },
+    {
+        imgSrc: p5rCover.src,
+        href: "https://en.wikipedia.org/wiki/Metal_Gear_Solid_(video_game)",
+    },
+    {
+        imgSrc: pentimentCover.src,
+        href: "https://en.wikipedia.org/wiki/Pentiment_(video_game)",
+    },
+    {
+        imgSrc: tpCover.src,
+        href: "https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_Twilight_Princess",
+    },
+    {
+        imgSrc: transistorCover.src,
+        href: "https://en.wikipedia.org/wiki/Transistor_(video_game)",
+    },
+];
+
+const faveMovieShows: FavoriteItem[] = [
+    {
+        imgSrc: twbbCover.src,
+        href: "https://en.wikipedia.org/wiki/There_Will_Be_Blood",
+    },
+    {
+        imgSrc: iwtvCover.src,
+        href: "https://en.wikipedia.org/wiki/Interview_with_the_Vampire_(TV_series)",
+    },
+    {
+        imgSrc: querelleCover.src,
+        href: "https://en.wikipedia.org/wiki/Querelle",
+    },
+    {
+        imgSrc: stCover.src,
+        href: "https://en.wikipedia.org/wiki/Star_Trek:_The_Original_Series",
+    },
+    {
+        imgSrc: phantomThreadCover.src,
+        href: "https://en.wikipedia.org/wiki/Phantom_Thread",
+    },
+];
+
+const faveAnimeManga: FavoriteItem[] = [
+    {
+        imgSrc: narutoCover.src,
+        href: "https://en.wikipedia.org/wiki/Naruto",
+    },
+    {
+        imgSrc: bfCover.src,
+        href: "https://en.wikipedia.org/wiki/Banana_Fish",
+    },
+    {
+        imgSrc: dvmCover.src,
+        href: "https://en.wikipedia.org/wiki/Devilman",
+    },
+    {
+        imgSrc: promareCover.src,
+        href: "https://en.wikipedia.org/wiki/Promare",
+    },
+    {
+        imgSrc: utenaCover.src,
+        href: "https://en.wikipedia.org/wiki/Revolutionary_Girl_Utena",
+    },
+    {
+        imgSrc: yugiohCover.src,
+        href: "https://en.wikipedia.org/wiki/Yu-Gi-Oh!_Duel_Monsters",
+    },
+];
 ---
 
-<Layout></Layout>
+<Layout styles="items-center">
+    <div
+        class="fixed inset-0 -z-10 bg-center bg-repeat"
+        style=`background-image: url(${greenKnit.src})`
+    >
+        <div class="w-full h-full relative">
+            <img
+                src={timberWolf.src}
+                class="absolute -left-16 bottom-0 h-150 drop-shadow-md drop-shadow-theme-dark"
+            />
+        </div>
+    </div>
+    <div
+        class="absolute top-8 left-60 text-white z-10 font-bold text-md drop-shadow-sm drop-shadow-black"
+    >
+        <a href="/" class="hover:underline">
+            {`<- Home`}
+        </a>
+    </div>
+    <div class="flex-col h-screen w-full flex justify-center items-center">
+        <div class="w-[70%] h-130 items-center flex flex-col relative">
+            <img
+                src={paperStack.src}
+                class="absolute -top-10 right-0 -z-1 w-full drop-shadow-xl drop-shadow-black"
+            />
+            <div class="bg-light h-15 w-[30%] rounded-t-md self-start relative">
+                <div
+                    class="font-title text-4xl text-theme-orange h-full p-2 rounded-md"
+                >
+                    <div
+                        class="bg-white flex h-full items-center px-5 shadow"
+                        style=`background-image: url(${cotton.src})`
+                    >
+                        <p>ABOUT</p>
+                    </div>
+                </div>
+
+                <img
+                    src={paperClip.src}
+                    class="h-20 absolute right-5 -top-0.5"
+                />
+            </div>
+            <div
+                class="overflow-y-scroll bg-light p-10 w-full h-full rounded-md flex flex-col rounded-tl-none shadow-xl"
+            >
+                <div class="flex w-full gap-5 h-60">
+                    <div
+                        class="relative h-full border-dashed border-theme-orange border-3 shadow"
+                    >
+                        <img class="h-full rounded-sm" src={portrait.src} />
+                        <img
+                            class="absolute -top-2 left-26 h-10 drop-shadow-2xl drop-shadow-black"
+                            src={pin.src}
+                        />
+                    </div>
+                    <div
+                        class="flex-1 h-60 w-8/12 bg-white relative shadow rounded-sm p-5"
+                        style=`background-image: url(${cotton.src})`
+                    >
+                        <img
+                            src={blueTape.src}
+                            class="absolute -top-6 -right-10 h-20 drop-shadow-sm drop-shadow-theme-dark"
+                        />
+                        <img
+                            src={blueTape.src}
+                            class="absolute -bottom-9 -left-15 h-20 drop-shadow-sm drop-shadow-theme-dark"
+                        />
+                        <div
+                            class="h-full overflow-y-scroll flex flex-col gap-2"
+                        >
+                            <p>
+                                {
+                                    `Hi!!! My name is Sam ^__^ I'm 24 years old and I love to make art and plushies! I recently moved to Sweden and am soon moving to Poland for a bit with my partner :)
+                         I grew up in North Carolina, USA. I have worked as a software engineer for a few years and learned about the indie web, which inspired me to make this website!
+                         I want to make a site that is completely my own and not controlled and owned by the whims of big corporations. I want to share my art and ramble about my interests and life
+                         as well :D I just want this site to be a lot of fun!! Right now I'm very much fixated on sefikura so that's almost all I make art of Xb`
+                                }
+                            </p>
+
+                            <p>
+                                {
+                                    `I love all kinds of art and frequently enjoy experimenting with different mediums. I enjoy making illustrations with watercolor markers, watercolor, crayons, copics,
+                                 gansai tambi, acrylic gouache, and a variety of pens (I keep buying too many bc they end up not being waterproof T__T).
+                        `
+                                }
+                            </p>
+                            <p>
+                                {
+                                    `I also love doing crafts! Besides visual art I love sewing plush dolls :) I started making them in 2023 in college because I wanted dolls for Eli and Daniel from There Will Be Blood.
+                            Since then I've continued making plushies and designing and embroidering my own faces for each one! It's been a lot of fun. Other crafts I enjoy is polymer clay, felt collages, and shrinky dinks.`
+                                }
+                            </p>
+                            <p>
+                                {
+                                    `I majored in computer science in college and enjoyed programming during school and throughout my professional career. I'm super interested in the indie web and wanted to make my own site using a lot
+                            of technologies the community advocates for. This site uses IndieAuth, Micropub to make blog posts, automatic syndication to the fediverse and the 'atmosphere' (bluesky), and webmentions to bring interactions
+                            outside of my site back into my website in order to avoid creating silos. I use Astro as my static site generator. Oh also I really love using Vim ;D`
+                                }
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 flex flex-col gap-5">
+                    <FavoriteList title="fave games" items={faveGameList} />
+                    <FavoriteList
+                        title="fave movies/shows"
+                        items={faveMovieShows}
+                    />
+                    <FavoriteList
+                        title="fave anime/manga"
+                        items={faveAnimeManga}
+                    />
+                </div>
+                <div
+                    class="flex flex-col items-center mt-10 border-double border-10 rounded-lg border-theme-dark shadow p-2 bg-repeat"
+                    style=`background-image: url(${corkboard.src})`
+                >
+                    <div class="flex gap-3 items-center">
+                        <img
+                            src={heartAnimated.src}
+                            class="h-15 drop-shadow-md drop-shadow-theme-dark"
+                        />
+                        <img
+                            src={tangoText.src}
+                            class="w-50 drop-shadow-md drop-shadow-theme-dark"
+                        />
+                        <img
+                            src={heartAnimated.src}
+                            class="h-15 drop-shadow-md drop-shadow-theme-dark"
+                        />
+                    </div>
+                    <div class="flex w-full justify-center items-center gap-5">
+                        <div class="w-fit relative h-50 self-center">
+                            <img
+                                src={heart.src}
+                                class="h-full drop-shadow-lg drop-shadow-theme-dark"
+                            />
+                            <p
+                                class="w-30 absolute top-10 left-12 text-center text-wrap font-bold text-white drop-shadow-md drop-shadow-theme-dark"
+                            >
+                                My sweet sweet lizard Tango T___T best lizard
+                                ever....
+                            </p>
+                        </div>
+                        <div class="chat chat-end">
+                            <div
+                                class="chat-bubble bg-white text-black text-xl drop-shadow-md drop-shadow-theme-dark"
+                            >
+                                i am so so cute and sneaky :3
+                            </div>
+                        </div>
+
+                        <div class="relative">
+                            <img
+                                src={tango.src}
+                                class="w-60 drop-shadow-md drop-shadow-theme-dark"
+                            />
+                            <img
+                                class="absolute top-3 left-23 h-10 drop-shadow-2xl drop-shadow-black"
+                                src={pin.src}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</Layout>
