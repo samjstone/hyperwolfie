@@ -1,8 +1,11 @@
 ---
+import { url } from "astro:schema";
 
+const {postId} = Astro.props as {postId: string}
 ---
 
 <comentario-comments
     theme="light"
     css-override="/comments.css"
+    page-id={`/${postId}/`}
 ></comentario-comments>

@@ -19,10 +19,9 @@ interface BlogProps {
   postData?: PostData;
   feed: Post[];
   page: Page<Post> | null;
-  showInteractions: boolean;
 }
 
-const { postData, feed, page, showInteractions } = Astro.props as BlogProps;
+const { postData, feed, page } = Astro.props as BlogProps;
 
 const nextFeedPost =
   feed.at(feed.findIndex((p) => p.id === postData?.id) + 1) || null;
@@ -62,9 +61,14 @@ const prevPostUrl =
   list-style-type: disc;
   padding-left: 1.5em; /* resets often zero this, which pushes bullets outside the visible area */
 }
+
+.postContainer :global(a){
+  text-decoration: underline;
+  color: var(--color-theme-blue)
+}
 </style>
 
-<Layout styles=" items-center p-3 pt-16 lg:p-0">
+<Layout styles=" items-center p-3 pt-16 lg:p-0 overflow-x-hidden">
   <div
     class="fixed inset-0 -z-10 bg-cover bg-center bg-no-repeat"
     style=`background-image: url(${mountainForest.src})`
@@ -72,7 +76,7 @@ const prevPostUrl =
 
   </div>
   <div
-    class="flex-col gap-5 lg:h-full w-full flex justify-center items-center lg:mt-25"
+    class="flex-col gap-5 lg:h-full w-full flex justify-center items-center mt-10 lg:mt-25"
   >
     <div
       class="relative w-full lg:w-[80%] lg:m-0 flex flex-col justify-center items-center"
@@ -106,7 +110,7 @@ const prevPostUrl =
           <div class="lg:hidden pt-5">
             <DropdownButton label="Entries 🐾" id="calendar">
               <div
-                class="relative overflow-scroll bg-cover flex justify-center h-90 p-5 border-black border-double border-4 lg:h-7/8 [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:bg-theme-blue [&::-webkit-scrollbar-thumb]:border-sm"
+                class="relative overflow-scroll bg-cover  justify-center h-90 p-5 border-black border-double border-4 lg:h-7/8 [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:bg-theme-blue [&::-webkit-scrollbar-thumb]:border-sm"
                 style={`background-image: url(${grassHills.src})`}
               >
                 <img
@@ -119,20 +123,20 @@ const prevPostUrl =
           </div>
           <div class="flex flex-col w-full lg:w-7/8">
             <div
-              class="flex bg-white justify-between flex-col bg-fixed border-2 border-dotted border-black h-[calc(100vh-190px)] lg:h-full overflow-y-scroll p-3 md:p-5 [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:bg-theme-orange [&::-webkit-scrollbar-thumb]:border-sm"
+              class="bg-white bg-fixed border-2 border-dotted border-black h-[calc(100vh-190px)] lg:h-full overflow-y-scroll p-3 md:p-5 [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-white [&::-webkit-scrollbar-thumb]:bg-theme-orange [&::-webkit-scrollbar-thumb]:border-sm"
               style={`background-image: url(${linedGreen.src})`}
             >
-              <div class="h-full">
+              <div>
                 {
                   postData ? (
-                    <div class="h-entry h-full">
+                    <div class="h-entry">
                       <a
                         class="u-url"
                         href={new URL(`/${postData.id}/`, Astro.site).href}
                         hidden
                       />
                       <div />
-                      <div class="pb-2 flex gap-2 justify-end">
+                      <div class="pb-2 flex gap-3 justify-end text-sm md:text-[16px]">
                         <a
                           href={`/${postData.id}/`}
                           class="text-theme-orange font-bold hover:underline"
@@ -154,14 +158,16 @@ const prevPostUrl =
                         </a>
 
                       </div>
-                      <a
-                        href={`/${postData.id}/`}
-                        class="hover:underline p-name mb-3 font-extrabold text-3xl font-fredoka text-theme-green"
-                      >
-                        {postData.title}
-                      </a>
+                      <div class="mb-3">
+                        <a
+                          href={`/${postData.id}/`}
+                          class="hover:underline p-name font-extrabold text-3xl font-fredoka text-theme-green"
+                        >
+                          {postData.title}
+                        </a>
+                      </div>
                       <div
-                        class="e-content postContainer h-full flex flex-col gap-5"
+                        class="e-content postContainer flex flex-col gap-5"
                         set:html={postData.html.toString()}
                       />
                       <a
@@ -227,37 +233,39 @@ const prevPostUrl =
             </div>
 
             <div
-              class="p-3 text-white border-black bg-repeat border-3 h-2/8 overflow-y-scroll [&::-webkit-scrollbar]:w-3 [&::-webkit-scrollbar-track]:bg-theme-dark [&::-webkit-scrollbar-thumb]:bg-theme-blue [&::-webkit-scrollbar-thumb]:border-sm"
+              class="p-3 text-white border-black bg-repeat border-3 h-2/8 overflow-y-scroll"
               style={`background-image: url(${dirt.src}); border-style: ridge`}
             >
               <h3 class="font-bold text-theme-yellow">Tags</h3>
-              {postData?.tags.map((tag) => <div class="w-fit">#{tag}</div>)}
+              <div class="flex gap-2">
+
+              {postData?.tags.map((tag) => <div>#{tag}</div>)}
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    {showInteractions === true && postData ? (
+    { postData ? (
+      <div class="relative rounded-sm bg-light w-full lg:w-[80%] self-center py-5 px-12" id="comments">
+        <div class="mb-5">
 
-    <div class="relative rounded-sm bg-light w-full lg:w-[80%] self-center py-5 px-12" id="comments">
-      <div class="mb-5">
+        <PostWebmentions postId={postData.id} server:defer>
+          <span
+            class="loading loading-dots loading-md"
+            slot="fallback"
+          />
+        </PostWebmentions>
+        </div>
 
-      <PostWebmentions postId={postData.id} server:defer>
-        <span
-          class="loading loading-dots loading-md"
-          slot="fallback"
+        <h2 class="font-bold text-theme-blue text-xl">Comments</h2>
+        <Comments server:defer postId={postData.id} />
+        <img
+          class="hidden md:block absolute -bottom-14 md:-left-18 lg:-left-32 h-40 lg:h-50 -z-1"
+          src={wolfYell.src}
+          alt="Wolf yelling gif"
         />
-      </PostWebmentions>
       </div>
-
-      <h2 class="font-bold text-theme-blue text-xl">Comments</h2>
-      <Comments server:defer />
-      <img
-        class="hidden md:block absolute -bottom-14 md:-left-18 lg:-left-32 h-40 lg:h-50 -z-1"
-        src={wolfYell.src}
-        alt="Wolf yelling gif"
-      />
-    </div>
     ) : <></>}
   </div>
 </Layout>
